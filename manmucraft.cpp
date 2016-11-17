@@ -82,6 +82,8 @@ void specialKeypressHandler(int key, int x, int y) {
 		case GLUT_KEY_DOWN:
 			camera.moveBackwards();
 			break;
+		default:
+			break;
 	}
 }
 

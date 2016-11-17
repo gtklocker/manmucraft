@@ -13,3 +13,6 @@ clean:
 
 build:
 	$(CC) $(GCCFLAGS) $(INCLUDE) $(CFLAGS) camera.cpp grid.cpp manmucraft.cpp $(LDFLAGS) $(LDLIBS) -o manmucraft
+
+run: build
+	./manmucraft

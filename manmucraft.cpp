@@ -24,6 +24,8 @@ float delta;
 int frames;
 int ticks;
 
+bool isFullscreen = false;
+
 Grid grid(GRID_SIZE, TILE_SIZE);
 Camera camera(START_POS_X, START_POS_Z, CAMERA_SPEED);
 
@@ -83,6 +85,28 @@ void special_keys(int key, int xx, int yy) {
 	}
 }
 
+void toggleFullscreen() {
+	if (isFullscreen) {
+		glutPositionWindow(0, 0);
+		glutReshapeWindow(WINDOW_WIDTH, WINDOW_HEIGHT);
+	}
+	else {
+		glutFullScreen();
+	}
+	isFullscreen = !isFullscreen;
+}
+
+void keypressHandler(unsigned char key, int x, int y) {
+	switch (key) {
+		case 'f':
+			// toggle fullscreen
+			toggleFullscreen();
+			break;
+		default:
+			break;
+	}
+}
+
 int main(int argc, char *argv[]) {
 	timer = 0;
 	newTime = 0;
@@ -105,6 +129,7 @@ int main(int argc, char *argv[]) {
 	glutDisplayFunc(render);
 	glutIdleFunc(render);
 	glutSpecialFunc(special_keys);
+	glutKeyboardFunc(keypressHandler);
 	
 	cout << glGetString(GL_VERSION) << endl;
 	cout << glGetString(GL_VENDOR) << endl;

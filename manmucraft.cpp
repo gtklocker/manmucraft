@@ -38,6 +38,7 @@ void update(float delta) {
 }
 
 void draw() {
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	camera.updateView();
 	glPushMatrix();	
@@ -46,6 +47,14 @@ void draw() {
 	player.render();
 
 	glPopMatrix();
+}
+
+// Called on start or when the window dimensions change
+void reshapeHandler(int w, int h) {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glViewport(0.0, 0.0, (GLsizei) w, (GLsizei) h);
+	gluPerspective(60, (GLfloat) w / (GLfloat) h, 0.1, 1000);
 }
 
 void render() {
@@ -127,14 +136,10 @@ int main(int argc, char *argv[]) {
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutCreateWindow("Manmucraft!");
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glViewport(0.0, 0.0, WINDOW_WIDTH, WINDOW_HEIGHT);
-	gluPerspective(60, WINDOW_WIDTH / WINDOW_HEIGHT, 0.1, 1000);
-	glMatrixMode(GL_MODELVIEW);
 	glEnable(GL_DEPTH_TEST);
 	
 	glutDisplayFunc(render);
+	glutReshapeFunc(reshapeHandler);
 	glutIdleFunc(render);
 	glutSpecialFunc(specialKeypressHandler);
 	glutKeyboardFunc(keypressHandler);

@@ -69,7 +69,7 @@ void render() {
 }
 
 void specialKeypressHandler(int key, int x, int y) {
-	switch(key){
+	switch (key) {
 		case GLUT_KEY_LEFT:
 			camera.lookLeft();
 			break;

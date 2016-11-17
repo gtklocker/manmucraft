@@ -7,6 +7,7 @@ LDFLAGS = -L/usr/lib/
 LDLIBS =  -lGLU -lGL -lglut -lm
 
 default: clean build
+.PHONY: default clean build run
 
 clean:
 	rm -f manmucraft

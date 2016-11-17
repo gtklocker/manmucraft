@@ -13,7 +13,7 @@ clean:
 	rm -f manmucraft
 
 build:
-	$(CC) $(GCCFLAGS) $(INCLUDE) $(CFLAGS) camera.cpp grid.cpp manmucraft.cpp $(LDFLAGS) $(LDLIBS) -o manmucraft
+	$(CC) $(GCCFLAGS) $(INCLUDE) $(CFLAGS) player.cpp camera.cpp grid.cpp manmucraft.cpp $(LDFLAGS) $(LDLIBS) -o manmucraft
 
 run: build
 	./manmucraft

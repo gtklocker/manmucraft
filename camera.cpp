@@ -26,13 +26,13 @@ void Camera::moveBackwards() {
 }
 
 void Camera::lookLeft() {
-	m_angle -= 0.01;
+	m_angle -= m_speed;
 	m_lx = sin(m_angle);
 	m_lz = -cos(m_angle);
 }
 
 void Camera::lookRight() {
-	m_angle += 0.01;
+	m_angle += m_speed;
 	m_lx = sin(m_angle);
 	m_lz = -cos(m_angle);
 }

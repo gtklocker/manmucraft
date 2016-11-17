@@ -8,6 +8,7 @@ LDLIBS =  -lGLU -lGL -lglut -lm
 
 
 manmucraft:
-	$(CC) $(GCCFLAGS) $(INCLUDE) $(CFLAGS) manmucraft.cpp $(LDFLAGS) $(LDLIBS) -o manmucraft
+	$(CC) $(GCCFLAGS) $(INCLUDE) $(CFLAGS) camera.cpp grid.cpp manmucraft.cpp $(LDFLAGS) $(LDLIBS) -o manmucraft
+
 default:
 	manmucraft

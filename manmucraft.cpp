@@ -2,12 +2,20 @@
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
+#include "grid.h"
+#include "camera.h"
 
 using namespace std;
 
-const float WINDOW_WIDTH = 500.0;
-const float WINDOW_HEIGHT = 500.0;
+const float WINDOW_WIDTH = 800.0;
+const float WINDOW_HEIGHT = 600.0;
 const float STEP = 60.0 / 1000.0; // 60 ticks per 1000 ms
+
+const int GRID_SIZE = 10;
+const int TILE_SIZE = 1.0;
+const float START_POS_X = 0.0;
+const float START_POS_Z = 0.1;
+const float CAMERA_SPEED = 0.1;
 
 int timer;
 int oldTime;
@@ -16,12 +24,19 @@ float delta;
 int frames;
 int ticks;
 
+Grid grid(GRID_SIZE, TILE_SIZE);
+Camera camera(START_POS_X, START_POS_Z, CAMERA_SPEED);
+
 void update(float delta) {
 }
 
 void draw() {
+	glLoadIdentity();
+	camera.updateView();
 	glPushMatrix();	
-	// Render
+
+	grid.render();
+
 	glPopMatrix();
 }
 
@@ -51,6 +66,23 @@ void render() {
 	}
 }
 
+void special_keys(int key, int xx, int yy) {
+	switch(key){
+		case GLUT_KEY_LEFT:
+			camera.lookLeft();
+			break;
+		case GLUT_KEY_RIGHT:
+			camera.lookRight();
+			break;
+		case GLUT_KEY_UP:
+			camera.moveForward();
+			break;
+		case GLUT_KEY_DOWN:
+			camera.moveBackwards();
+			break;
+	}
+}
+
 int main(int argc, char *argv[]) {
 	timer = 0;
 	newTime = 0;
@@ -59,19 +91,20 @@ int main(int argc, char *argv[]) {
 	ticks = 0;
 
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH);
-	glutInitWindowSize(WINDOW_HEIGHT, WINDOW_WIDTH);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutCreateWindow("Manmucraft!");
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0, WINDOW_WIDTH, 0.0, WINDOW_HEIGHT, -100.0, 100.0);
+	glViewport(0.0, 0.0, WINDOW_WIDTH, WINDOW_HEIGHT);
+	gluPerspective(60, WINDOW_WIDTH / WINDOW_HEIGHT, 0.1, 1000);
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	glEnable(GL_DEPTH_TEST);
+	
 	glutDisplayFunc(render);
 	glutIdleFunc(render);
-
-	glEnable(GL_DEPTH_TEST);
+	glutSpecialFunc(special_keys);
 	
 	cout << glGetString(GL_VERSION) << endl;
 	cout << glGetString(GL_VENDOR) << endl;

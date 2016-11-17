@@ -8,8 +8,8 @@
 
 using namespace std;
 
-const float WINDOW_WIDTH = 800.0;
-const float WINDOW_HEIGHT = 600.0;
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 600;
 const float STEP = 60.0 / 1000.0; // 60 ticks per 1000 ms
 
 const int GRID_SIZE = 10;

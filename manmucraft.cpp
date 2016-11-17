@@ -68,7 +68,7 @@ void render() {
 	}
 }
 
-void special_keys(int key, int xx, int yy) {
+void specialKeypressHandler(int key, int x, int y) {
 	switch(key){
 		case GLUT_KEY_LEFT:
 			camera.lookLeft();
@@ -128,7 +128,7 @@ int main(int argc, char *argv[]) {
 	
 	glutDisplayFunc(render);
 	glutIdleFunc(render);
-	glutSpecialFunc(special_keys);
+	glutSpecialFunc(specialKeypressHandler);
 	glutKeyboardFunc(keypressHandler);
 	
 	cout << glGetString(GL_VERSION) << endl;

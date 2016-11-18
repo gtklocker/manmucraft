@@ -1,6 +1,8 @@
+#include <iostream>
 #include <cmath>
 
 #include "player.h"
+#include "debug.h"
 #define _USE_MATH_DEFINES
 
 using namespace std;
@@ -69,20 +71,28 @@ void Player::render() {
 
 void Player::turnLeft(){
 	m_angle += 0.1;
+	DEBUG(cout << "new angle " << m_angle << endl);
 }
 
 void Player::turnRight(){
 	m_angle -= 0.1;
+	DEBUG(cout << "new angle " << m_angle << endl);
 }
 
 void Player::moveForward() {
 	m_z -= 0.1 * cos(m_angle);
 	m_x -= 0.1 * sin(m_angle);
+
+	DEBUG(cout << "moved to (x:" << m_x << ", z:" << m_z << ")" << endl);
+	DEBUG(cout << "with angle " << m_angle << endl);
 }
 
 void Player::moveBackwards(){
 	m_z += 0.1 * cos(m_angle);
 	m_x += 0.1 * sin(m_angle);
+
+	DEBUG(cout << "moved to (x:" << m_x << ", z:" << m_z << ")" << endl);
+	DEBUG(cout << "with angle " << m_angle << endl);
 }
 
 void Player::updateView(){

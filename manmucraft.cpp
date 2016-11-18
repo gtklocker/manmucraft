@@ -27,6 +27,9 @@ int ticks;
 
 bool isFullscreen = false;
 
+float lastX;
+float lastY;
+
 Grid grid(GRID_SIZE, TILE_SIZE);
 Player player(P_START_POS_X, P_START_POS_Y, P_START_POS_Z);
 
@@ -121,6 +124,28 @@ void keypressHandler(unsigned char key, int x, int y) {
 	}
 }
 
+void mouseMoveHandler(int x, int y) {
+	if (x > lastX) {
+		player.turnRight();
+	}
+	else if (x < lastX) {
+		player.turnLeft();
+	}
+
+	if (y > lastY) {
+		player.lookUp();
+	}
+	else if (y < lastY) {
+		player.lookDown();
+	}
+	lastX = x;
+	lastY = y;
+}
+
+void mouseClickHandler(int button, int state, int x, int y) {
+	
+}
+
 int main(int argc, char *argv[]) {
 	timer = 0;
 	newTime = 0;
@@ -140,11 +165,18 @@ int main(int argc, char *argv[]) {
 	glutIdleFunc(render);
 	glutSpecialFunc(specialKeypressHandler);
 	glutKeyboardFunc(keypressHandler);
-	
+	glutMouseFunc(mouseClickHandler);
+	glutPassiveMotionFunc(mouseMoveHandler);
+	glutSetCursor(GLUT_CURSOR_NONE);
+
 	cout << glGetString(GL_VERSION) << endl;
 	cout << glGetString(GL_VENDOR) << endl;
 	cout << glGetString(GL_RENDERER) << endl;
 
 	oldTime = glutGet(GLUT_ELAPSED_TIME);	
+	lastX = WINDOW_WIDTH / 2;
+	lastY = WINDOW_HEIGHT / 2;
+	glutWarpPointer(lastX, lastY);
+
 	glutMainLoop();
 }

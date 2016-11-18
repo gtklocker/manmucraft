@@ -5,7 +5,7 @@
 
 class Player {
 private:
-	float m_x, m_y, m_z, m_radius, m_angle;
+	float m_x, m_y, m_z, m_radius, m_angle, m_pitch;
 public:
 	Player(float x, float y, float z);
 	~Player();
@@ -13,6 +13,8 @@ public:
 	void render();
 	void turnLeft();
 	void turnRight();
+	void lookUp();
+	void lookDown();
 	void moveForward();
 	void moveBackwards();
 	void updateView();

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-float toDegrees(float rads){
+float toDegrees(float rads) {
 	return rads * 180 / M_PI;
 }
 
@@ -69,12 +69,12 @@ void Player::render() {
 	glPopMatrix();
 }
 
-void Player::turnLeft(){
+void Player::turnLeft() {
 	m_angle += 0.1;
 	DEBUG(cout << "new angle " << m_angle << endl);
 }
 
-void Player::turnRight(){
+void Player::turnRight() {
 	m_angle -= 0.1;
 	DEBUG(cout << "new angle " << m_angle << endl);
 }
@@ -87,7 +87,7 @@ void Player::moveForward() {
 	DEBUG(cout << "with angle " << m_angle << endl);
 }
 
-void Player::moveBackwards(){
+void Player::moveBackwards() {
 	m_z += 0.1 * cos(m_angle);
 	m_x += 0.1 * sin(m_angle);
 
@@ -95,7 +95,7 @@ void Player::moveBackwards(){
 	DEBUG(cout << "with angle " << m_angle << endl);
 }
 
-void Player::updateView(){
+void Player::updateView() {
 	gluLookAt(
 		-(m_radius * sin(M_PI + m_angle)) + m_x,
 		m_y + 2.0,

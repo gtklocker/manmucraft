@@ -87,6 +87,14 @@ void Player::moveForward() {
 	DEBUG(cout << "with angle " << m_angle << endl);
 }
 
+void Player::lookUp() {
+	m_pitch += 0.1;
+}
+
+void Player::lookDown(){
+	m_pitch -= 0.1;
+}
+
 void Player::moveBackwards() {
 	m_z += 0.1 * cos(m_angle);
 	m_x += 0.1 * sin(m_angle);
@@ -102,7 +110,7 @@ void Player::updateView() {
 		-(m_radius * cos(M_PI + m_angle)) + m_z,
 
 		m_x,
-		m_y + 1.0,
+		m_y + 1.0 + m_pitch,
 		m_z,
 
 		0.0,

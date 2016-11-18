@@ -3,11 +3,20 @@
 #include <GL/glu.h>
 #include <GL/gl.h>
 
-class Grid {
+enum Type {
+	GRASS, DIRT, EMPTY
+};
 
+struct Cube {
+	Type type;	
+	Cube(Type t);
+};
+
+class Grid {
 private:
 	int m_size;
 	float m_tileSize;
+	Cube ****grid;
 public:
 	Grid(int size, float tileSize);
 	~Grid();

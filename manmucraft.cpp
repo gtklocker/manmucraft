@@ -2,8 +2,8 @@
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
+
 #include "grid.h"
-#include "camera.h"
 #include "player.h"
 
 using namespace std;
@@ -14,9 +14,6 @@ const float STEP = 60.0 / 1000.0; // 60 ticks per 1000 ms
 
 const int GRID_SIZE = 10;
 const int TILE_SIZE = 1.0;
-const float C_START_POS_X = 0.0;
-const float C_START_POS_Z = 1.1;
-const float CAMERA_SPEED = 0.1;
 const float P_START_POS_X = 0.0;
 const float P_START_POS_Y = 0.5;
 const float P_START_POS_Z = 0.0;
@@ -31,7 +28,6 @@ int ticks;
 bool isFullscreen = false;
 
 Grid grid(GRID_SIZE, TILE_SIZE);
-Camera camera(C_START_POS_X, C_START_POS_Z, CAMERA_SPEED);
 Player player(P_START_POS_X, P_START_POS_Y, P_START_POS_Z);
 
 void update(float delta) {
@@ -40,7 +36,7 @@ void update(float delta) {
 void draw() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	camera.updateView();
+	player.updateView();
 	glPushMatrix();	
 
 	grid.render();
@@ -86,16 +82,16 @@ void render() {
 void specialKeypressHandler(int key, int x, int y) {
 	switch (key) {
 		case GLUT_KEY_LEFT:
-			camera.lookLeft();
+			player.turnLeft();
 			break;
 		case GLUT_KEY_RIGHT:
-			camera.lookRight();
+			player.turnRight();
 			break;
 		case GLUT_KEY_UP:
-			camera.moveForward();
+			player.moveForward();
 			break;
 		case GLUT_KEY_DOWN:
-			camera.moveBackwards();
+			player.moveBackwards();
 			break;
 		default:
 			break;
@@ -109,6 +105,7 @@ void toggleFullscreen() {
 	}
 	else {
 		glutFullScreen();
+
 	}
 	isFullscreen = !isFullscreen;
 }

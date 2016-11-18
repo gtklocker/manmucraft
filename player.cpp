@@ -11,12 +11,14 @@ float toDegrees(float rads) {
 	return rads * 180 / M_PI;
 }
 
+const float MOVE_ANGLE = .05;
+
 Player::Player(float x, float y, float z) {
 	m_x = x;
 	m_y = y;
 	m_z = z;
 	m_angle = 0.0;
-	m_radius = 2.0;
+	m_radius = 1.0;
 }
 
 Player::~Player() { }
@@ -70,12 +72,12 @@ void Player::render() {
 }
 
 void Player::turnLeft() {
-	m_angle += 0.1;
+	m_angle += MOVE_ANGLE;
 	DEBUG(cout << "new angle " << m_angle << endl);
 }
 
 void Player::turnRight() {
-	m_angle -= 0.1;
+	m_angle -= MOVE_ANGLE;
 	DEBUG(cout << "new angle " << m_angle << endl);
 }
 
@@ -88,11 +90,11 @@ void Player::moveForward() {
 }
 
 void Player::lookUp() {
-	m_pitch += 0.1;
+	m_pitch -= MOVE_ANGLE;
 }
 
 void Player::lookDown(){
-	m_pitch -= 0.1;
+	m_pitch += MOVE_ANGLE;
 }
 
 void Player::moveBackwards() {

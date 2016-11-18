@@ -76,11 +76,13 @@ void Player::turnRight(){
 }
 
 void Player::moveForward() {
-	m_z += 0.1;
+	m_z -= 0.1 * cos(m_angle);
+	m_x -= 0.1 * sin(m_angle);
 }
 
 void Player::moveBackwards(){
-	m_z -= 0.1;
+	m_z += 0.1 * cos(m_angle);
+	m_x += 0.1 * sin(m_angle);
 }
 
 void Player::updateView(){

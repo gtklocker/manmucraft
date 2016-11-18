@@ -18,7 +18,7 @@ Player::Player(float x, float y, float z) {
 	m_y = y;
 	m_z = z;
 	m_angle = 0.0;
-	m_radius = 2.0;
+	m_radius = 1.0;
 }
 
 Player::~Player() { }

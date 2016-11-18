@@ -86,16 +86,14 @@ void Player::moveBackwards(){
 }
 
 void Player::updateView(){
-	//gluLookAt(m_x , m_y + 1.0, m_z + 2.50 , m_x + sin(0), 1.0, m_z + 1.50 - cos(0), 0.0, 1.0, 0.0);
-	float r = m_radius;
 	gluLookAt(
-		r * sin(m_angle) - m_x,
-		m_y + 1.5,
-		r * cos(m_angle) - m_z,
+		-(m_radius * sin(M_PI + m_angle)) + m_x,
+		m_y + 2.0,
+		-(m_radius * cos(M_PI + m_angle)) + m_z,
 
-		0.0,
+		m_x,
 		m_y + 1.0,
-		0.0,
+		m_z,
 
 		0.0,
 		1.0,

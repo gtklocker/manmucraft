@@ -9,6 +9,7 @@ enum Type {
 
 struct Cube {
 	Type type;	
+	bool isChosen;
 	Cube(Type t);
 };
 

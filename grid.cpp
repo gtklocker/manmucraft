@@ -27,6 +27,11 @@ Grid::Grid(int size, float tileSize) {
 			}
 		}
 	}
+
+	// TODO Remove, for debugging only
+	for (int j = 0; j < m_size / 2; ++j) {
+		grid[j][1][2] = new Cube(GRASS);
+	}
 }
 
 Grid::~Grid() { 
@@ -72,7 +77,6 @@ Cube* Grid::getCubeAtGreedy(GreedyCoords greedy) {
 }
 
 void Grid::render() {
-
 	for (int i = 0; i < m_size; ++i) {
 		glPushMatrix();
 		glTranslatef(i * m_tileSize, 0.0, 0.0);

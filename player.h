@@ -10,6 +10,10 @@ private:
 	float m_x, m_y, m_z, m_angle, m_pitch;
 	bool m_firstPerson;
 	Grid *m_grid;
+
+	void moveWithDirection(int direction);
+	void moveTo(RealCoords coords);
+	bool canMoveTo(RealCoords coords);
 public:
 	Player(float x, float y, float z, Grid *grid);
 	~Player();

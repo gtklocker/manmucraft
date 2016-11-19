@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <cassert>
 
 #include "player.h"
 #include "grid.h"
@@ -76,6 +77,24 @@ void Player::render() {
 	glPopMatrix();
 }
 
+bool Player::canMoveTo(RealCoords coords) {
+	Cube *currentCube = m_grid->getCubeAtReal((RealCoords){m_x, m_y + 1, m_z});
+	Cube *nextCeilCube = m_grid->getCubeAtReal((RealCoords){ceil(coords.x), coords.y + 1, ceil(coords.z)});
+	Cube *nextFloorCube = m_grid->getCubeAtReal((RealCoords){floor(coords.x), coords.y + 1, floor(coords.z)});
+
+	if ((nextFloorCube == NULL || nextFloorCube->type == EMPTY) &&
+		(nextCeilCube == NULL || nextCeilCube->type == EMPTY)) {
+		return true;
+	}
+	return false;
+}
+
+void Player::moveTo(RealCoords coords) {
+	m_x = coords.x;
+	m_y = coords.y;
+	m_z = coords.z;
+}
+
 void Player::turnLeft() {
 	m_angle += MOVE_ANGLE;
 	DEBUG(cout << "new angle " << m_angle << endl);
@@ -86,9 +105,29 @@ void Player::turnRight() {
 	DEBUG(cout << "new angle " << m_angle << endl);
 }
 
+void Player::moveWithDirection(int direction) {
+	// 1 for front, -1 for back
+	assert(direction == 1 || direction == -1);
+	RealCoords candidate = (RealCoords){
+		m_x - direction * (0.1 * sin(m_angle)),
+		m_y,
+		m_z - direction * (0.1 * cos(m_angle))
+	};
+
+	if (canMoveTo(candidate)) {
+		moveTo(candidate);
+	}
+}
+
 void Player::moveForward() {
-	m_z -= 0.1 * cos(m_angle);
-	m_x -= 0.1 * sin(m_angle);
+	moveWithDirection(1);
+
+	DEBUG(cout << "moved to (x:" << m_x << ", z:" << m_z << ")" << endl);
+	DEBUG(cout << "with angle " << m_angle << endl);
+}
+
+void Player::moveBackwards() {
+	moveWithDirection(-1);
 
 	DEBUG(cout << "moved to (x:" << m_x << ", z:" << m_z << ")" << endl);
 	DEBUG(cout << "with angle " << m_angle << endl);
@@ -100,14 +139,6 @@ void Player::lookUp() {
 
 void Player::lookDown() {
 	m_pitch += MOVE_ANGLE;
-}
-
-void Player::moveBackwards() {
-	m_z += 0.1 * cos(m_angle);
-	m_x += 0.1 * sin(m_angle);
-
-	DEBUG(cout << "moved to (x:" << m_x << ", z:" << m_z << ")" << endl);
-	DEBUG(cout << "with angle " << m_angle << endl);
 }
 
 void Player::toggleCameraView(){

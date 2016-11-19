@@ -12,6 +12,18 @@ struct Cube {
 	Cube(Type t);
 };
 
+struct GreedyCoords {
+	int x;
+	int y;
+	int z;
+};
+
+struct RealCoords {
+	float x;
+	float y;
+	float z;
+};
+
 class Grid {
 private:
 	int m_size;
@@ -24,4 +36,8 @@ public:
 	void update(float delta);
 	void render();
 
+	RealCoords transformGreedyToReal(GreedyCoords greedy);
+	GreedyCoords transformRealToGreedy(RealCoords real);
+	Cube* getCubeAtReal(RealCoords real);
+	Cube* getCubeAtGreedy(GreedyCoords greedy);
 };

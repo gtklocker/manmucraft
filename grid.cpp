@@ -51,7 +51,7 @@ void Grid::render() {
 	for (int i = 0; i < m_size; ++i) {
 		glPushMatrix();
 		glTranslatef(i * m_tileSize, 0.0, 0.0);
-		for (int j = 0; j < 1; ++j) {
+		for (int j = 0; j < m_size; ++j) {
 			glPushMatrix();
 			glTranslatef(0.0, j * m_tileSize, 0.0);
 			for (int k = 0; k < m_size; ++k) {

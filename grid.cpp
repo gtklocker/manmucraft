@@ -67,7 +67,6 @@ Cube* Grid::getCubeAtGreedy(GreedyCoords greedy) {
 		greedy.z < 0 || greedy.z >= m_size) {
 		return NULL;
 	}
-
 	return grid[greedy.x][greedy.y][greedy.z];
 }
 
@@ -84,7 +83,12 @@ void Grid::render() {
 					case EMPTY:
 						continue;
 					case DIRT:
-						glColor3f(0.5, 0.25, 0.0);
+						if (grid[i][j][k]->isChosen) {
+							glColor3f(0.85, 0.60, 0.35);
+						}
+						else {
+							glColor3f(0.5, 0.25, 0.0);
+						}
 						break;
 					case GRASS:
 						glColor3f(0.0, 0.75, 0.0);

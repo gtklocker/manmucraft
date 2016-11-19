@@ -12,9 +12,16 @@ float toDegrees(float rads) {
 	return rads * 180 / M_PI;
 }
 
+float distanceRealCoords(RealCoords &r1, RealCoords &r2) {
+	return sqrt(pow(r1.x - r2.x, 2) + pow(r1.y - r2.y, 2) + pow(r1.z - r2.z, 2));
+}
+
 const float MOVE_ANGLE = .05;
 const float TP_RADIUS = 1.5;
 const float FP_RADIUS = 0.50;
+const float RAY_LENGTH = 2.0;
+
+Cube *lastChosen;
 
 Player::Player(float x, float y, float z, Grid *grid) {
 	m_x = x;
@@ -28,7 +35,27 @@ Player::Player(float x, float y, float z, Grid *grid) {
 
 Player::~Player() { }
 
-void Player::update(float delta) { }
+void Player::update(float delta) {
+	if (lastChosen) {
+		lastChosen->isChosen = false;
+	}
+
+	RealCoords start {m_x, m_y + 0.9, m_z};
+	RealCoords current {m_x, m_y + 0.9, m_z};
+	Cube *cb;
+	
+	while (distanceRealCoords(start, current) <= RAY_LENGTH) {
+		current.x -= 0.1 * sin(m_angle);
+		current.y += 0.1 * sin(m_pitch);
+		current.z -= 0.1 * cos(m_angle);
+		cb = m_grid->getCubeAtReal(current);
+		if (cb && cb->type != EMPTY) {
+			cb->isChosen = true;
+			lastChosen = cb;
+			break;
+		}
+	}
+}
 
 void Player::render() {
 	glColor3f(0.0, 1.0, 0.0);
@@ -73,6 +100,7 @@ void Player::render() {
 	glPushMatrix();
 	glTranslatef(0.0, 0.7, 0.0);
 	glutSolidSphere(0.15, 25, 25);
+	glPopMatrix();
 	glPopMatrix();
 }
 

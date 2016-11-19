@@ -14,9 +14,9 @@ const float STEP = 60.0 / 1000.0; // 60 ticks per 1000 ms
 
 const int GRID_SIZE = 10;
 const int TILE_SIZE = 1.0;
-const float P_START_POS_X = 0.0;
+const float P_START_POS_X = 5.0;
 const float P_START_POS_Y = 0.5;
-const float P_START_POS_Z = 0.0;
+const float P_START_POS_Z = 5.0;
 
 int timer;
 int oldTime;
@@ -34,6 +34,7 @@ Grid grid(GRID_SIZE, TILE_SIZE);
 Player player(P_START_POS_X, P_START_POS_Y, P_START_POS_Z, &grid);
 
 void update(float delta) {
+	player.update(delta);
 }
 
 void draw() {

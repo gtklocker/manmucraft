@@ -31,7 +31,7 @@ float lastX;
 float lastY;
 
 Grid grid(GRID_SIZE, TILE_SIZE);
-Player player(P_START_POS_X, P_START_POS_Y, P_START_POS_Z);
+Player player(P_START_POS_X, P_START_POS_Y, P_START_POS_Z, &grid);
 
 void update(float delta) {
 }

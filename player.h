@@ -3,12 +3,15 @@
 #include <GL/glu.h>
 #include <GL/gl.h>
 
+#include "grid.h"
+
 class Player {
 private:
 	float m_x, m_y, m_z, m_angle, m_pitch;
 	bool m_firstPerson;
+	Grid *m_grid;
 public:
-	Player(float x, float y, float z);
+	Player(float x, float y, float z, Grid *grid);
 	~Player();
 	void update(float delta);
 	void render();

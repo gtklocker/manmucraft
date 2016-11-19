@@ -2,6 +2,7 @@
 #include <cmath>
 
 #include "player.h"
+#include "grid.h"
 #include "debug.h"
 #define _USE_MATH_DEFINES
 
@@ -15,10 +16,12 @@ const float MOVE_ANGLE = .05;
 const float TP_RADIUS = 1.5;
 const float FP_RADIUS = 0.50;
 
-Player::Player(float x, float y, float z) {
+Player::Player(float x, float y, float z, Grid *grid) {
 	m_x = x;
 	m_y = y;
 	m_z = z;
+	m_grid = grid;
+
 	m_angle = 0.0;
 	m_firstPerson = true;
 }

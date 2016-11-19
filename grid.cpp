@@ -62,9 +62,9 @@ Cube* Grid::getCubeAtReal(RealCoords real) {
 }
 
 Cube* Grid::getCubeAtGreedy(GreedyCoords greedy) {
-	if (greedy.x < -1 || greedy.x > m_size ||
-		greedy.y < -1 || greedy.y > m_size ||
-		greedy.z < -1 || greedy.z > m_size) {
+	if (greedy.x < 0 || greedy.x >= m_size ||
+		greedy.y < 0 || greedy.y >= m_size ||
+		greedy.z < 0 || greedy.z >= m_size) {
 		return NULL;
 	}
 

@@ -119,6 +119,10 @@ void keypressHandler(unsigned char key, int x, int y) {
 			// toggle fullscreen
 			toggleFullscreen();
 			break;
+		case 'v':
+			// toggle camera view
+			player.toggleCameraView();
+			break;
 		default:
 			break;
 	}

@@ -12,13 +12,15 @@ float toDegrees(float rads) {
 }
 
 const float MOVE_ANGLE = .05;
+const float TP_RADIUS = 1.5;
+const float FP_RADIUS = 0.50;
 
 Player::Player(float x, float y, float z) {
 	m_x = x;
 	m_y = y;
 	m_z = z;
 	m_angle = 0.0;
-	m_radius = 1.0;
+	m_firstPerson = true;
 }
 
 Player::~Player() { }
@@ -93,7 +95,7 @@ void Player::lookUp() {
 	m_pitch -= MOVE_ANGLE;
 }
 
-void Player::lookDown(){
+void Player::lookDown() {
 	m_pitch += MOVE_ANGLE;
 }
 
@@ -105,18 +107,39 @@ void Player::moveBackwards() {
 	DEBUG(cout << "with angle " << m_angle << endl);
 }
 
+void Player::toggleCameraView(){
+	m_firstPerson = !m_firstPerson;
+}
+
 void Player::updateView() {
-	gluLookAt(
-		-(m_radius * sin(M_PI + m_angle)) + m_x,
-		m_y + 2.0,
-		-(m_radius * cos(M_PI + m_angle)) + m_z,
+	if (!m_firstPerson) {
+		gluLookAt(
+			-(TP_RADIUS * sin(M_PI + m_angle)) + m_x,
+			m_y + 2.0,
+			-(TP_RADIUS * cos(M_PI + m_angle)) + m_z,
 
-		m_x,
-		m_y + 1.0 + m_pitch,
-		m_z,
+			m_x,
+			m_y + 1.0 + m_pitch,
+			m_z,
 
-		0.0,
-		1.0,
-		0.0
-	);
+			0.0,
+			1.0,
+			0.0
+		);
+	}
+	else {
+		gluLookAt(
+			(FP_RADIUS * sin(M_PI + m_angle)) + m_x,
+			m_y + 0.9,
+			(FP_RADIUS * cos(M_PI + m_angle)) + m_z,
+
+			m_x - 1.0 * sin(m_angle),
+			m_y + 1.0 + m_pitch,
+			m_z - 1.0 * cos(m_angle),
+
+			0.0,
+			1.0,
+			0.0
+		);
+	}
 }

@@ -2,8 +2,8 @@
 #include <ctime>
 #include "grid.h"
 
-Cube::Cube(Type t){
-	type = t;
+Cube::Cube(Color c){
+	color = c;
 }
 
 Grid::Grid(int size, float tileSize) {
@@ -18,8 +18,12 @@ Grid::Grid(int size, float tileSize) {
 		for (int j = 0; j < size; ++j){
 			grid[i][j] = new Cube *[size];
 			for (int k = 0; k < size; ++k){
-				if (j == 0){
-					grid[i][j][k] = new Cube(DIRT);
+				Color randomColor = Color(rand() % MAGENTA);
+				if (j == 0) {
+					grid[i][j][k] = new Cube(randomColor);
+					if (i == size / 2 && k == size / 2) {
+						grid[i][j][k] = new Cube(MAGENTA);
+					}
 				}
 				else {
 					grid[i][j][k] = new Cube(EMPTY);
@@ -30,7 +34,7 @@ Grid::Grid(int size, float tileSize) {
 
 	// TODO Remove, for debugging only
 	for (int j = 0; j < m_size / 2; ++j) {
-		grid[j][1][2] = new Cube(GRASS);
+		grid[j][1][2] = new Cube(RED);
 	}
 }
 
@@ -91,24 +95,24 @@ void Grid::render() {
 			glPushMatrix();
 			glTranslatef(0.0, j * m_tileSize, 0.0);
 			for (int k = 0; k < m_size; ++k) {
-				switch (grid[i][j][k]->type) {
+				float c = grid[i][j][k]->isChosen ? .35 : 0;
+				switch (grid[i][j][k]->color) {
 					case EMPTY:
 						continue;
-					case DIRT:
-						if (grid[i][j][k]->isChosen) {
-							glColor3f(0.85, 0.60, 0.35);
-						}
-						else {
-							glColor3f(0.5, 0.25, 0.0);
-						}
+					case YELLOW:
+						glColor3f(.90 + c, .67 + c, .04 + c);
 						break;
-					case GRASS:
-						if (grid[i][j][k]->isChosen) {
-							glColor3f(0.35, 0.95, 0.35);
-						}
-						else {
-							glColor3f(0.0, 0.75, 0.0);
-						}
+					case RED:
+						glColor3f(.97 + c, .03 + c, .03 + c);
+						break;
+					case BLUE:
+						glColor3f(0.0 + c, 0.0 + c, 1.0 + c);
+						break;
+					case GREEN:
+						glColor3f(0.0 + c, 1.0 + c, 0.0 + c);
+						break;
+					case MAGENTA:
+						glColor3f(.71 + c, .11 + c, .76 + c);
 						break;
 					default:
 						break;

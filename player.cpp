@@ -50,7 +50,7 @@ void Player::update(float delta) {
 		current.y += 0.1f * sin(m_pitch);
 		current.z -= 0.1f * cos(m_angle);
 		cb = m_grid->getCubeAtReal(current);
-		if (cb && cb->type != EMPTY) {
+		if (cb && cb->color != EMPTY) {
 			cb->isChosen = true;
 			m_chosen = cb;
 			break;
@@ -110,8 +110,8 @@ bool Player::canMoveTo(RealCoords coords) {
 	Cube *nextCeilCube = m_grid->getCubeAtReal((RealCoords){ceil(coords.x), coords.y + 1, ceil(coords.z)});
 	Cube *nextFloorCube = m_grid->getCubeAtReal((RealCoords){floor(coords.x), coords.y + 1, floor(coords.z)});
 
-	if ((nextFloorCube == NULL || nextFloorCube->type == EMPTY) &&
-		(nextCeilCube == NULL || nextCeilCube->type == EMPTY)) {
+	if ((nextFloorCube == NULL || nextFloorCube->color == EMPTY) &&
+		(nextCeilCube == NULL || nextCeilCube->color == EMPTY)) {
 		return true;
 	}
 	return false;

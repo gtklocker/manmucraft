@@ -22,8 +22,6 @@ const float TP_RADIUS = 1.5;
 const float FP_RADIUS = 0.50;
 const float RAY_LENGTH = 2.0;
 
-Cube *lastChosen;
-
 Player::Player(float x, float y, float z, Grid *grid) {
 	m_x = x;
 	m_y = y;
@@ -37,8 +35,8 @@ Player::Player(float x, float y, float z, Grid *grid) {
 Player::~Player() { }
 
 void Player::update(float delta) {
-	if (lastChosen) {
-		lastChosen->isChosen = false;
+	if (m_chosen) {
+		m_chosen->isChosen = false;
 	}
 
 	RealCoords start {m_x, m_y + 0.9f, m_z};
@@ -52,7 +50,7 @@ void Player::update(float delta) {
 		cb = m_grid->getCubeAtReal(current);
 		if (cb && cb->type != EMPTY) {
 			cb->isChosen = true;
-			lastChosen = cb;
+			m_chosen = cb;
 			break;
 		}
 	}

@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 #include "grid.h"
 
 Cube::Cube(Color c){
@@ -85,6 +86,23 @@ Cube* Grid::getCubeAtGreedy(GreedyCoords greedy) {
 		return NULL;
 	}
 	return grid[greedy.x][greedy.y][greedy.z];
+}
+
+bool Grid::doCollide(RealCoords a, GreedyCoords b) {
+	Cube *cubeThere = getCubeAtGreedy(b);
+	if (cubeThere == NULL || (cubeThere != NULL && cubeThere->color == EMPTY)) {
+		return false;
+	}
+
+	// TODO: maybe tune this factor for better collision detection
+	float laxTileSize = 0.8 * m_tileSize;
+
+	RealCoords rb = transformGreedyToReal(b);
+	if (abs(a.x - rb.x) * abs(a.x - rb.x) + abs(a.z - rb.z) * abs(a.z - rb.z) <= laxTileSize * laxTileSize) {
+		return true;
+	}
+
+	return false;
 }
 
 void Grid::render() {

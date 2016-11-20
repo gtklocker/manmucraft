@@ -37,6 +37,8 @@ public:
 	void update(float delta);
 	void render();
 
+	bool doCollide(RealCoords a, GreedyCoords b);
+
 	RealCoords transformGreedyToReal(GreedyCoords greedy);
 	GreedyCoords transformRealToGreedy(RealCoords real);
 	Cube* getCubeAtReal(RealCoords real);

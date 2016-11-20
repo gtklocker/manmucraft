@@ -106,15 +106,20 @@ void Player::render() {
 }
 
 bool Player::canMoveTo(RealCoords coords) {
-	Cube *currentCube = m_grid->getCubeAtReal((RealCoords){m_x, m_y + 1, m_z});
-	Cube *nextCeilCube = m_grid->getCubeAtReal((RealCoords){ceil(coords.x), coords.y + 1, ceil(coords.z)});
-	Cube *nextFloorCube = m_grid->getCubeAtReal((RealCoords){floor(coords.x), coords.y + 1, floor(coords.z)});
+	GreedyCoords g = m_grid->transformRealToGreedy(coords);
 
-	if ((nextFloorCube == NULL || nextFloorCube->color == EMPTY) &&
-		(nextCeilCube == NULL || nextCeilCube->color == EMPTY)) {
-		return true;
+	for (int i = -1; i <= 1; ++i) {
+		for (int j = -1; j <= 1; ++j) {
+			GreedyCoords gt = g;
+			gt.x += i;
+			gt.z += j;
+
+			if (m_grid->doCollide(coords, gt)) {
+				return false;
+			}
+		}
 	}
-	return false;
+	return true;
 }
 
 void Player::moveTo(RealCoords coords) {

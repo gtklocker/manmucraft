@@ -10,6 +10,8 @@ using namespace std;
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
+int currentWindowWidth;
+int currentWindowHeight;
 const float STEP = 60.0 / 1000.0; // 60 ticks per 1000 ms
 
 const int GRID_SIZE = 10;
@@ -34,6 +36,13 @@ Grid grid(GRID_SIZE, TILE_SIZE);
 Player player(P_START_POS_X, P_START_POS_Y, P_START_POS_Z, &grid);
 
 void update(float delta) {
+	if (lastX > currentWindowWidth - 100 || lastX < 100
+		|| lastY > currentWindowHeight - 100 || lastY < 100){
+		lastX = currentWindowWidth / 2;
+		lastY = currentWindowHeight / 2;
+		glutWarpPointer(lastX, lastY);
+	}
+
 	player.update(delta);
 }
 
@@ -51,6 +60,8 @@ void draw() {
 
 // Called on start or when the window dimensions change
 void reshapeHandler(int w, int h) {
+	currentWindowWidth = w;
+	currentWindowHeight = h;
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glViewport(0.0, 0.0, (GLsizei) w, (GLsizei) h);
@@ -170,6 +181,9 @@ int main(int argc, char *argv[]) {
 	frames = 0;
 	ticks = 0;
 
+	lastX = WINDOW_WIDTH / 2;
+	lastY = WINDOW_HEIGHT / 2;
+	
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -191,8 +205,6 @@ int main(int argc, char *argv[]) {
 	cout << glGetString(GL_RENDERER) << endl;
 
 	oldTime = glutGet(GLUT_ELAPSED_TIME);	
-	lastX = WINDOW_WIDTH / 2;
-	lastY = WINDOW_HEIGHT / 2;
 	glutWarpPointer(lastX, lastY);
 
 	glutMainLoop();

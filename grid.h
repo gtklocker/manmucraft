@@ -3,14 +3,14 @@
 #include <GL/glu.h>
 #include <GL/gl.h>
 
-enum Type {
-	GRASS, DIRT, EMPTY
+enum Color {
+	RED, BLUE, GREEN, YELLOW, MAGENTA, EMPTY
 };
 
 struct Cube {
-	Type type;	
+	Color color;	
 	bool isChosen;
-	Cube(Type t);
+	Cube(Color c);
 };
 
 struct GreedyCoords {

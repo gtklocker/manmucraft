@@ -6,6 +6,7 @@
 
 #include "grid.h"
 #include "player.h"
+#include "lighting.h"
 
 using namespace std;
 
@@ -155,6 +156,18 @@ void keypressHandler(unsigned char key, int x, int y) {
 		case ' ':
 			player.jump();
 			break;
+		case '1':
+			toggleLight(GL_LIGHT0);
+			break;
+		case '2':
+			toggleLight(GL_LIGHT1);
+			break;
+		case '3':
+			toggleLight(GL_LIGHT2);
+			break;
+		case '4':
+			toggleLight(GL_LIGHT3);
+			break;
 		default:
 			break;
 	}
@@ -207,6 +220,8 @@ int main(int argc, char *argv[]) {
 	glutMouseFunc(mouseClickHandler);
 	glutPassiveMotionFunc(mouseMoveHandler);
 	glutSetCursor(GLUT_CURSOR_NONE);
+
+	initLighting(GRID_SIZE, TILE_SIZE);
 
 	cout << glGetString(GL_VERSION) << endl;
 	cout << glGetString(GL_VENDOR) << endl;

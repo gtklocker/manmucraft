@@ -13,7 +13,7 @@ clean:
 	rm -f manmucraft grid_test
 
 build:
-	$(CC) $(GCCFLAGS) $(INCLUDE) $(CFLAGS) player.cpp grid.cpp manmucraft.cpp $(LDFLAGS) $(LDLIBS) -o manmucraft
+	$(CC) $(GCCFLAGS) $(INCLUDE) $(CFLAGS) lighting.cpp player.cpp grid.cpp manmucraft.cpp $(LDFLAGS) $(LDLIBS) -o manmucraft
 
 grid_test:
 	$(CC) $(GCCFLAGS) $(INCLUDE) $(CFLAGS) grid.cpp grid_test.cpp $(LDFLAGS) $(LDLIBS) -o grid_test

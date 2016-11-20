@@ -14,9 +14,9 @@ const float STEP = 60.0 / 1000.0; // 60 ticks per 1000 ms
 
 const int GRID_SIZE = 10;
 const int TILE_SIZE = 1.0;
-const float P_START_POS_X = 5.0;
+const float P_START_POS_X = GRID_SIZE / 2;
 const float P_START_POS_Y = 0.5;
-const float P_START_POS_Z = 5.0;
+const float P_START_POS_Z = GRID_SIZE / 2;
 
 int timer;
 int oldTime;

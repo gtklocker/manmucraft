@@ -55,11 +55,19 @@ void Grid::update(float delta) {
 //  - Real which is the system OpenGL uses
 //  - Greedy which is the system our grid works with
 RealCoords Grid::transformGreedyToReal(GreedyCoords greedy) {
-	return (RealCoords){greedy.x * m_tileSize, greedy.y * m_tileSize, greedy.z * m_tileSize};
+	return (RealCoords){
+		greedy.x * m_tileSize,
+		greedy.y * m_tileSize,
+		greedy.z * m_tileSize
+	};
 }
 
 GreedyCoords Grid::transformRealToGreedy(RealCoords real) {
-	return (GreedyCoords){(int) (real.x / m_tileSize), (int) (real.y / m_tileSize), (int) (real.z / m_tileSize)};
+	return (GreedyCoords){
+		(int) ((real.x + m_tileSize / 2) / m_tileSize),
+		(int) ((real.y + m_tileSize / 2) / m_tileSize),
+		(int) ((real.z + m_tileSize / 2) / m_tileSize)
+	};
 }
 
 Cube* Grid::getCubeAtReal(RealCoords real) {

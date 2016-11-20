@@ -41,14 +41,14 @@ void Player::update(float delta) {
 		lastChosen->isChosen = false;
 	}
 
-	RealCoords start {m_x, m_y + 0.9, m_z};
-	RealCoords current {m_x, m_y + 0.9, m_z};
+	RealCoords start {m_x, m_y + 0.9f, m_z};
+	RealCoords current {m_x, m_y + 0.9f, m_z};
 	Cube *cb;
 	
 	while (distanceRealCoords(start, current) <= RAY_LENGTH) {
-		current.x -= 0.1 * sin(m_angle);
-		current.y += 0.1 * sin(m_pitch);
-		current.z -= 0.1 * cos(m_angle);
+		current.x -= 0.1f * sin(m_angle);
+		current.y += 0.1f * sin(m_pitch);
+		current.z -= 0.1f * cos(m_angle);
 		cb = m_grid->getCubeAtReal(current);
 		if (cb && cb->type != EMPTY) {
 			cb->isChosen = true;
@@ -137,9 +137,9 @@ void Player::moveWithDirection(int direction) {
 	// 1 for front, -1 for back
 	assert(direction == 1 || direction == -1);
 	RealCoords candidate = (RealCoords){
-		m_x - direction * (0.1 * sin(m_angle)),
+		m_x - direction * (0.1f * sin(m_angle)),
 		m_y,
-		m_z - direction * (0.1 * cos(m_angle))
+		m_z - direction * (0.1f * cos(m_angle))
 	};
 
 	if (canMoveTo(candidate)) {

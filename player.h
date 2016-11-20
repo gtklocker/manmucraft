@@ -8,6 +8,7 @@
 class Player {
 private:
 	float m_x, m_y, m_z, m_angle, m_pitch;
+	float m_downSpeed;
 	bool m_firstPerson;
 	Grid *m_grid;
 	Cube *m_chosen;
@@ -26,6 +27,7 @@ public:
 	void lookDown();
 	void moveForward();
 	void moveBackwards();
+	void jump();
 	void toggleCameraView();
 	void updateView();
 };

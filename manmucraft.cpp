@@ -152,6 +152,9 @@ void keypressHandler(unsigned char key, int x, int y) {
 		case 's':
 			player.moveBackwards();
 			break;
+		case ' ':
+			player.jump();
+			break;
 		default:
 			break;
 	}

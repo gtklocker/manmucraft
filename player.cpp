@@ -17,10 +17,12 @@ float distanceRealCoords(RealCoords &r1, RealCoords &r2) {
 	return sqrt(pow(r1.x - r2.x, 2) + pow(r1.y - r2.y, 2) + pow(r1.z - r2.z, 2));
 }
 
-const float MOVE_ANGLE = .05;
+const float MOVE_ANGLE = .025;
 const float TP_RADIUS = 1.5;
 const float FP_RADIUS = 0.50;
 const float RAY_LENGTH = 2.0;
+const float PITCH_UP_LIMIT = 1.5;
+const float PITCH_DOWN_LIMIT = -3.0;
 
 Player::Player(float x, float y, float z, Grid *grid) {
 	m_x = x;
@@ -160,11 +162,11 @@ void Player::moveBackwards() {
 }
 
 void Player::lookUp() {
-	m_pitch -= MOVE_ANGLE;
+	m_pitch -= PITCH_DOWN_LIMIT >= m_pitch ? 0 : MOVE_ANGLE;
 }
 
 void Player::lookDown() {
-	m_pitch += MOVE_ANGLE;
+	m_pitch += PITCH_UP_LIMIT <= m_pitch ? 0 : MOVE_ANGLE;
 }
 
 void Player::toggleCameraView(){

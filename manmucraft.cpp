@@ -124,6 +124,18 @@ void keypressHandler(unsigned char key, int x, int y) {
 			// toggle camera view
 			player.toggleCameraView();
 			break;
+		case 'a':
+			player.turnLeft();
+			break;
+		case 'd':
+			player.turnRight();
+			break;
+		case 'w':
+			player.moveForward();
+			break;
+		case 's':
+			player.moveBackwards();
+			break;
 		default:
 			break;
 	}

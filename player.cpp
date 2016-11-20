@@ -23,6 +23,9 @@ const float FP_RADIUS = 0.50;
 const float RAY_LENGTH = 2.0;
 const float PITCH_UP_LIMIT = 1.5;
 const float PITCH_DOWN_LIMIT = -3.0;
+const float Y_DIST = .125;
+const float JUMP_DIST = 5.0;
+const float G = 9.807 / 50;
 
 Player::Player(float x, float y, float z, Grid *grid) {
 	m_x = x;
@@ -32,9 +35,11 @@ Player::Player(float x, float y, float z, Grid *grid) {
 
 	m_angle = 0.0;
 	m_firstPerson = true;
+	m_downSpeed = 0.0;
 }
 
 Player::~Player() { }
+
 
 void Player::update(float delta) {
 	if (m_chosen) {
@@ -56,13 +61,23 @@ void Player::update(float delta) {
 			break;
 		}
 	}
+
+	m_downSpeed += G * delta;
+	float nextY = m_y - m_downSpeed * delta;
+	Cube *below = m_grid->getCubeAtReal((RealCoords){m_x, nextY - Y_DIST, m_z});
+	if (below == NULL || below->color == EMPTY) {
+		m_y = nextY;
+	}
+	else {
+		m_downSpeed = 0;
+	}
 }
 
 void Player::render() {
 	glColor3f(0.0, 1.0, 0.0);
 	glPushMatrix();
 
-	glTranslatef(m_x, m_y + 0.125, m_z);
+	glTranslatef(m_x, m_y + Y_DIST, m_z);
 	glRotatef(toDegrees(m_angle) + 180, 0.0, 1.0, 0.0);	
 	
 	// Legs
@@ -107,6 +122,7 @@ void Player::render() {
 
 bool Player::canMoveTo(RealCoords coords) {
 	GreedyCoords g = m_grid->transformRealToGreedy(coords);
+	DEBUG(cout << "player has (x: " << coords.x << ", y: " << coords.y << ", z: " << coords.z << ")" << endl);
 
 	for (int i = -1; i <= 1; ++i) {
 		for (int j = -1; j <= 1; ++j) {
@@ -115,6 +131,7 @@ bool Player::canMoveTo(RealCoords coords) {
 			gt.z += j;
 
 			if (m_grid->doCollide(coords, gt)) {
+				DEBUG(cout << "collision with (x: " << gt.x << ", y: " << gt.y << ", z: " << gt.z << ")" << endl);
 				return false;
 			}
 		}
@@ -176,6 +193,10 @@ void Player::lookDown() {
 
 void Player::toggleCameraView(){
 	m_firstPerson = !m_firstPerson;
+}
+
+void Player::jump() {
+	m_y += JUMP_DIST;
 }
 
 void Player::updateView() {

@@ -95,7 +95,12 @@ void Grid::render() {
 						}
 						break;
 					case GRASS:
-						glColor3f(0.0, 0.75, 0.0);
+						if (grid[i][j][k]->isChosen) {
+							glColor3f(0.35, 0.95, 0.35);
+						}
+						else {
+							glColor3f(0.0, 0.75, 0.0);
+						}
 						break;
 					default:
 						break;

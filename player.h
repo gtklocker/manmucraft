@@ -10,6 +10,7 @@ private:
 	float m_x, m_y, m_z, m_angle, m_pitch;
 	bool m_firstPerson;
 	Grid *m_grid;
+	Cube *m_chosen;
 
 	void moveWithDirection(int direction);
 	void moveTo(RealCoords coords);

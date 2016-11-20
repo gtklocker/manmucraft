@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
@@ -116,6 +117,10 @@ void toggleFullscreen() {
 
 void keypressHandler(unsigned char key, int x, int y) {
 	switch (key) {
+		case 'q':
+			// quit the game
+			exit(0);
+			break;
 		case 'f':
 			// toggle fullscreen
 			toggleFullscreen();

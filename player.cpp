@@ -28,6 +28,7 @@ const float Y_DIST = .125;
 const float JUMP_SPEED = 3.0;
 const float PLAYER_HEIGHT = 0.9;
 const float G = 9.807 / 5;
+const float GAP = 0.5;
 
 Player::Player(float x, float y, float z, Grid *grid) {
 	m_x = x;
@@ -180,13 +181,19 @@ void Player::moveWithDirection(int direction, float delta) {
 	// 1 for front, -1 for back
 	assert(direction == 1 || direction == -1);
 	RealCoords candidate = (RealCoords){
-		m_x - direction * (MOVE_SPEED * sin(m_angle)) * delta,
+		m_x - direction * ((MOVE_SPEED + (GAP / delta)) * sin(m_angle)) * delta,
 		m_y,
-		m_z - direction * (MOVE_SPEED * cos(m_angle)) * delta
+		m_z - direction * ((MOVE_SPEED + (GAP / delta)) * cos(m_angle)) * delta
+	};
+
+	RealCoords moveCandidate = (RealCoords){
+		m_x - direction * ((MOVE_SPEED) * sin(m_angle)) * delta,
+		m_y,
+		m_z - direction * ((MOVE_SPEED) * cos(m_angle)) * delta
 	};
 
 	if (canMoveTo(candidate)) {
-		moveTo(candidate);
+		moveTo(moveCandidate);
 	}
 }
 

@@ -141,6 +141,9 @@ void keypressHandler(unsigned char key, int x, int y) {
 			// toggle camera view
 			player.toggleCameraView();
 			break;
+		case ' ':
+			player.jump();
+			break;
 		case 'a':
 			player.turnLeft();
 			break;
@@ -152,9 +155,6 @@ void keypressHandler(unsigned char key, int x, int y) {
 			break;
 		case 's':
 			player.moveBackwards();
-			break;
-		case ' ':
-			player.jump();
 			break;
 		case '1':
 			toggleLight(GL_LIGHT0);
@@ -169,6 +169,17 @@ void keypressHandler(unsigned char key, int x, int y) {
 			toggleLight(GL_LIGHT3);
 			break;
 		default:
+			break;
+	}
+}
+
+void keyReleaseHandler(unsigned char key, int x, int y) {
+	switch (key) {
+		case 'w':
+			player.stopMovingForward();
+			break;
+		case 's':
+			player.stopMovingBackwards();
 			break;
 	}
 }
@@ -217,6 +228,7 @@ int main(int argc, char *argv[]) {
 	glutIdleFunc(render);
 	glutSpecialFunc(specialKeypressHandler);
 	glutKeyboardFunc(keypressHandler);
+	glutKeyboardUpFunc(keyReleaseHandler);
 	glutMouseFunc(mouseClickHandler);
 	glutPassiveMotionFunc(mouseMoveHandler);
 	glutSetCursor(GLUT_CURSOR_NONE);

@@ -18,14 +18,16 @@ float distanceRealCoords(RealCoords &r1, RealCoords &r2) {
 }
 
 const float MOVE_ANGLE = .025;
+const float MOVE_SPEED = 1.0;
 const float TP_RADIUS = 1.5;
 const float FP_RADIUS = 0.50;
 const float RAY_LENGTH = 2.0;
 const float PITCH_UP_LIMIT = 1.5;
 const float PITCH_DOWN_LIMIT = -3.0;
 const float Y_DIST = .125;
-const float JUMP_DIST = 5.0;
-const float G = 9.807 / 50;
+const float JUMP_SPEED = 3.0;
+const float PLAYER_HEIGHT = 0.9;
+const float G = 9.807 / 5;
 
 Player::Player(float x, float y, float z, Grid *grid) {
 	m_x = x;
@@ -35,13 +37,41 @@ Player::Player(float x, float y, float z, Grid *grid) {
 
 	m_angle = 0.0;
 	m_firstPerson = true;
-	m_downSpeed = 0.0;
+	m_ySpeed = 0.0;
 }
 
 Player::~Player() { }
 
 
 void Player::update(float delta) {
+	// Check movement
+	m_ySpeed -= G * delta;
+	float nextY = m_y + m_ySpeed * delta;
+	Cube *next;
+	if (m_ySpeed > 0){
+		next = m_grid->getCubeAtReal((RealCoords){m_x, nextY + PLAYER_HEIGHT + Y_DIST, m_z});	
+	}
+	else {
+		next = m_grid->getCubeAtReal((RealCoords){m_x, nextY - Y_DIST, m_z});
+	}
+
+	if (next == NULL || next->color == EMPTY) {
+		m_y = nextY;
+	}
+	else {
+		m_ySpeed = 0;
+		m_jumping = false;
+	}
+
+	if (m_movingForward) {
+		moveWithDirection(1, delta);
+	}
+
+	else if (m_movingBackwards) {
+		moveWithDirection(-1, delta);
+	}
+
+	// Raycast selection
 	if (m_chosen) {
 		m_chosen->isChosen = false;
 	}
@@ -62,15 +92,6 @@ void Player::update(float delta) {
 		}
 	}
 
-	m_downSpeed += G * delta;
-	float nextY = m_y - m_downSpeed * delta;
-	Cube *below = m_grid->getCubeAtReal((RealCoords){m_x, nextY - Y_DIST, m_z});
-	if (below == NULL || below->color == EMPTY) {
-		m_y = nextY;
-	}
-	else {
-		m_downSpeed = 0;
-	}
 }
 
 void Player::render() {
@@ -155,13 +176,13 @@ void Player::turnRight() {
 	DEBUG(cout << "new angle " << m_angle << endl);
 }
 
-void Player::moveWithDirection(int direction) {
+void Player::moveWithDirection(int direction, float delta) {
 	// 1 for front, -1 for back
 	assert(direction == 1 || direction == -1);
 	RealCoords candidate = (RealCoords){
-		m_x - direction * (0.1f * sin(m_angle)),
+		m_x - direction * (MOVE_SPEED * sin(m_angle)) * delta,
 		m_y,
-		m_z - direction * (0.1f * cos(m_angle))
+		m_z - direction * (MOVE_SPEED * cos(m_angle)) * delta
 	};
 
 	if (canMoveTo(candidate)) {
@@ -170,17 +191,25 @@ void Player::moveWithDirection(int direction) {
 }
 
 void Player::moveForward() {
-	moveWithDirection(1);
+	m_movingForward = true;
 
 	DEBUG(cout << "moved to (x:" << m_x << ", z:" << m_z << ")" << endl);
 	DEBUG(cout << "with angle " << m_angle << endl);
 }
 
+void Player::stopMovingForward() {
+	m_movingForward = false;
+}
+
 void Player::moveBackwards() {
-	moveWithDirection(-1);
+	m_movingBackwards = true;
 
 	DEBUG(cout << "moved to (x:" << m_x << ", z:" << m_z << ")" << endl);
 	DEBUG(cout << "with angle " << m_angle << endl);
+}
+
+void Player::stopMovingBackwards() {
+	m_movingBackwards = false;
 }
 
 void Player::lookUp() {
@@ -196,7 +225,9 @@ void Player::toggleCameraView(){
 }
 
 void Player::jump() {
-	m_y += JUMP_DIST;
+	if (!m_jumping && m_ySpeed == 0){
+		m_ySpeed += JUMP_SPEED;
+	}
 }
 
 void Player::updateView() {

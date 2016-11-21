@@ -8,12 +8,14 @@
 class Player {
 private:
 	float m_x, m_y, m_z, m_angle, m_pitch;
-	float m_downSpeed;
+	float m_ySpeed;
+	bool m_movingForward, m_movingBackwards;
 	bool m_firstPerson;
+	bool m_jumping;
 	Grid *m_grid;
 	Cube *m_chosen;
 
-	void moveWithDirection(int direction);
+	void moveWithDirection(int direction, float delta);
 	void moveTo(RealCoords coords);
 	bool canMoveTo(RealCoords coords);
 public:
@@ -26,7 +28,9 @@ public:
 	void lookUp();
 	void lookDown();
 	void moveForward();
+	void stopMovingForward();
 	void moveBackwards();
+	void stopMovingBackwards();
 	void jump();
 	void toggleCameraView();
 	void updateView();

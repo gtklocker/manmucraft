@@ -2,8 +2,11 @@
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
+#include <vector>
 
 #include "grid.h"
+
+using namespace std;
 
 class Player {
 private:
@@ -14,6 +17,7 @@ private:
 	bool m_jumping;
 	Grid *m_grid;
 	Cube *m_chosen;
+	vector<Cube> m_reserve;
 
 	void moveWithDirection(int direction, float delta);
 	void moveTo(RealCoords coords);
@@ -32,6 +36,8 @@ public:
 	void moveBackwards();
 	void stopMovingBackwards();
 	void jump();
+	void pickUpCube();
+	void placeCube();
 	void toggleCameraView();
 	void updateView();
 };

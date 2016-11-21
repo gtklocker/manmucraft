@@ -7,8 +7,6 @@
 #include "debug.h"
 #define _USE_MATH_DEFINES
 
-using namespace std;
-
 float toDegrees(float rads) {
 	return rads * 180 / M_PI;
 }
@@ -28,6 +26,7 @@ const float Y_DIST = .125;
 const float JUMP_SPEED = 3.0;
 const float PLAYER_HEIGHT = 0.9;
 const float G = 9.807 / 5;
+const float PLACE_DISTANCE = 1.75f;
 
 Player::Player(float x, float y, float z, Grid *grid) {
 	m_x = x;
@@ -227,6 +226,27 @@ void Player::toggleCameraView(){
 void Player::jump() {
 	if (!m_jumping && m_ySpeed == 0){
 		m_ySpeed += JUMP_SPEED;
+	}
+}
+
+void Player::pickUpCube() {
+	if (m_chosen && m_chosen->color != MAGENTA) {
+		m_reserve.push_back(Cube(m_chosen->color));
+		m_chosen->color = EMPTY;
+	}
+}
+
+void Player::placeCube() {
+	if (m_reserve.size() > 0) {
+		Cube *front = m_grid->getCubeAtReal((RealCoords){ 
+				m_x - PLACE_DISTANCE * sin(m_angle), 
+				m_y + PLAYER_HEIGHT + PLACE_DISTANCE * sin(m_pitch),
+				m_z - PLACE_DISTANCE * cos(m_angle)
+				});
+		if (front && front->color == EMPTY) {
+			front->color = m_reserve.back().color;
+			m_reserve.pop_back();
+		}
 	}
 }
 

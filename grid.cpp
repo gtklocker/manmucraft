@@ -94,8 +94,7 @@ bool Grid::doCollide(RealCoords a, GreedyCoords b) {
 		return false;
 	}
 
-	// TODO: maybe tune this factor for better collision detection
-	float laxTileSize = 0.8 * m_tileSize;
+	float laxTileSize = 1.25 * m_tileSize;
 
 	RealCoords rb = transformGreedyToReal(b);
 	if (abs(a.x - rb.x) * abs(a.x - rb.x) + abs(a.z - rb.z) * abs(a.z - rb.z) <= laxTileSize * laxTileSize) {

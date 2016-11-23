@@ -203,7 +203,13 @@ void mouseMoveHandler(int x, int y) {
 }
 
 void mouseClickHandler(int button, int state, int x, int y) {
-	
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		player.pickUpCube();
+	}
+
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+		player.placeCube();
+	}
 }
 
 int main(int argc, char *argv[]) {

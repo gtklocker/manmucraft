@@ -43,4 +43,6 @@ public:
 	GreedyCoords transformRealToGreedy(RealCoords real);
 	Cube* getCubeAtReal(RealCoords real);
 	Cube* getCubeAtGreedy(GreedyCoords greedy);
+	
+	float getCubeSize();
 };

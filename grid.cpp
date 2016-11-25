@@ -147,3 +147,7 @@ void Grid::render() {
 		glPopMatrix();
 	}
 }
+
+float Grid::getCubeSize() {
+	return m_tileSize;
+}

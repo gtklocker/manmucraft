@@ -41,7 +41,6 @@ Player::Player(float x, float y, float z, Grid *grid) {
 
 Player::~Player() { }
 
-
 void Player::update(float delta) {
 	// Check movement
 	m_ySpeed -= G * delta;
@@ -90,6 +89,16 @@ void Player::update(float delta) {
 			break;
 		}
 	}
+
+	// Flashlight position
+	GLfloat lightPos[] = {
+			m_x - 0.25f * sin(m_angle),
+			1.0f + m_y + (2 * PLAYER_HEIGHT) / 3.0f + 0.25f * sin(m_pitch),
+			m_z - 0.25f * cos(m_angle),
+			1.0f
+	};
+
+	glLightfv(GL_LIGHT4, GL_POSITION, lightPos);
 
 }
 

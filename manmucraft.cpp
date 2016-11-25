@@ -168,6 +168,9 @@ void keypressHandler(unsigned char key, int x, int y) {
 		case '4':
 			toggleLight(GL_LIGHT3);
 			break;
+		case '5':
+			toggleLight(GL_LIGHT4);
+			break;
 		default:
 			break;
 	}

@@ -1,19 +1,20 @@
 #include "lighting.h"
 
-const GLfloat lightSpec0[] = {1.0, 1.0, 1.0, 1.0};
-const GLfloat lightDif0[] = {1.0, 1.0, 1.0, 1.0};
-
 bool light0 = true;
 bool light1 = true;
 bool light2 = true;
 bool light3 = true;
+bool light4 = true;
 
 void initLighting(int gridSize, float tileSize) {
 	GLfloat lightPos0[] = {-1.0f, (gridSize + 1.0f) * tileSize, -1.0f, 0.0f};
 	GLfloat lightPos1[] = {-1.0f, (gridSize + 1.0f) * tileSize, (gridSize + 1.0f) * tileSize, 0.0f};
 	GLfloat lightPos2[] = {(gridSize + 1.0f) * tileSize, (gridSize + 1.0f) * tileSize, -1.0f, 0.0f};
 	GLfloat lightPos3[] = {(gridSize + 1.0f) * tileSize, (gridSize + 1.0f) * tileSize, (gridSize + 1.0f) * tileSize, 0.0f};
-	
+
+	GLfloat lightSpec0[] = {1.0, 1.0, 1.0, 1.0};
+	GLfloat lightDif0[] = {1.0, 1.0, 1.0, 1.0};
+
 	glLoadIdentity();
 	glEnable(GL_LIGHTING);
 	glShadeModel(GL_SMOOTH);
@@ -35,6 +36,12 @@ void initLighting(int gridSize, float tileSize) {
 	glLightfv(GL_LIGHT3, GL_POSITION, lightPos3);
 	glLightfv(GL_LIGHT3, GL_SPECULAR, lightSpec0);
 	glLightfv(GL_LIGHT3, GL_DIFFUSE, lightDif0);
+
+	// Flashlight init
+	glEnable(GL_LIGHT4);
+	GLfloat flashlightSpec[] = {0.50, 1.0, 1.0, 1.0};
+	glLightfv(GL_LIGHT4, GL_SPECULAR, flashlightSpec);
+	glLightfv(GL_LIGHT4, GL_DIFFUSE, flashlightSpec);
 }
 
 void toggleLight(GLint light) {
@@ -74,6 +81,15 @@ void toggleLight(GLint light) {
 				glEnable(GL_LIGHT3);
 			}
 			light3 = !light3;
+			break;
+		case GL_LIGHT4:
+			if (light4) {
+				glDisable(GL_LIGHT4);
+			}
+			else {
+				glEnable(GL_LIGHT4);
+			}
+			light4 = !light4;
 			break;
 	}
 }

@@ -41,4 +41,6 @@ public:
 	void placeCube();
 	void toggleCameraView();
 	void updateView();
+
+	char* getHUDString();
 };

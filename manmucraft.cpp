@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <cstring>
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
@@ -21,6 +22,9 @@ const int TILE_SIZE = 1.0;
 const float P_START_POS_X = GRID_SIZE / 2;
 const float P_START_POS_Y = 0.5;
 const float P_START_POS_Z = GRID_SIZE / 2;
+
+#define BITMAP_FONT GLUT_BITMAP_9_BY_15
+const int BITMAP_W = 9, BITMAP_H = 15;
 
 int timer;
 int oldTime;
@@ -60,6 +64,39 @@ void draw() {
 	glPopMatrix();
 }
 
+void drawText(char text[]) {
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0.0, currentWindowWidth, currentWindowHeight, 0.0);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
+
+	int linesBefore = 0;
+	glRasterPos2i(BITMAP_W, BITMAP_H * (linesBefore + 1));
+	for (int i = 0; i < strlen(text); ++i) {
+		if (text[i] == '\n') {
+			glRasterPos2i(BITMAP_W, BITMAP_H * (++linesBefore + 1));
+		}
+		else {
+			glutBitmapCharacter(BITMAP_FONT, text[i]);
+		}
+	}
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+}
+
 // Called on start or when the window dimensions change
 void reshapeHandler(int w, int h) {
 	currentWindowWidth = w;
@@ -68,6 +105,14 @@ void reshapeHandler(int w, int h) {
 	glLoadIdentity();
 	glViewport(0.0, 0.0, (GLsizei) w, (GLsizei) h);
 	gluPerspective(60, (GLfloat) w / (GLfloat) h, 0.1, 1000);
+}
+
+void drawHUD() {
+	char *hud = player.getHUDString();
+
+	drawText(hud);
+
+	delete[] hud;
 }
 
 void render() {
@@ -84,6 +129,8 @@ void render() {
 	// render game
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	draw();	
+	drawHUD();
+
 	glutSwapBuffers();
 	frames++;
 

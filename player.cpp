@@ -300,3 +300,14 @@ void Player::updateView() {
 		);
 	}
 }
+
+char* Player::getHUDString() {
+	char *buffer = new char[512];
+
+	sprintf(buffer,
+		"Level: %d\n"
+		"Max level reached: %d\n"
+		"Meaning of life: %d\n"
+		, m_currentLevel, m_levelReached, 42);
+	return buffer;
+}

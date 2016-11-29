@@ -112,6 +112,10 @@ void Grid::render() {
 			glPushMatrix();
 			glTranslatef(0.0, j * m_tileSize, 0.0);
 			for (int k = 0; k < m_size; ++k) {
+				if (grid[i][j][k] == NULL) {
+					continue;
+				}
+
 				float c = grid[i][j][k]->isChosen ? .35 : 0;
 				switch (grid[i][j][k]->color) {
 					case EMPTY:
@@ -150,4 +154,22 @@ void Grid::render() {
 
 float Grid::getCubeSize() {
 	return m_tileSize;
+}
+
+bool Grid::isGreedyCoordValid(int coord) {
+	return coord >= 0 && coord < m_size;
+}
+
+void Grid::kickCube(GreedyCoords start, GreedyCoords direction) {
+	direction.x = direction.x != 0 ? (direction.x / abs(direction.x)) : 0;
+	direction.z = direction.z != 0 ? (direction.z / abs(direction.z)) : 0;
+
+	Cube *prevCube = NULL;
+	for (int x = start.x, z = start.z; isGreedyCoordValid(x) && isGreedyCoordValid(z); x -= direction.x, z -= direction.z) {
+		Cube *cb = getCubeAtGreedy((GreedyCoords){x, start.y, z});
+		Cube **cbPtr = &cb;
+
+		grid[x][start.y][z] = prevCube;
+		prevCube = *cbPtr;
+	}
 }

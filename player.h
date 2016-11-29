@@ -18,6 +18,7 @@ private:
 	bool m_jumping;
 	Grid *m_grid;
 	Cube *m_chosen;
+	RealCoords m_chosenCoords;
 	vector<Cube> m_reserve;
 
 	void moveWithDirection(int direction, float delta);
@@ -39,6 +40,7 @@ public:
 	void jump();
 	void pickUpCube();
 	void placeCube();
+	void kickCube();
 	void toggleCameraView();
 	void updateView();
 

@@ -95,6 +95,8 @@ void Player::update(float delta) {
 		if (cb && cb->color != EMPTY) {
 			cb->isChosen = true;
 			m_chosen = cb;
+			m_chosenCoords = current;
+
 			break;
 		}
 	}
@@ -310,4 +312,15 @@ char* Player::getHUDString() {
 		"Meaning of life: %d\n"
 		, m_currentLevel, m_levelReached, 42);
 	return buffer;
+}
+
+void Player::kickCube() {
+	GreedyCoords current = m_grid->transformRealToGreedy((RealCoords){m_x, m_y + 0.9f, m_z});
+	GreedyCoords chosen = m_grid->transformRealToGreedy(m_chosenCoords);
+
+	if (current.y != chosen.y) {
+		return;
+	}
+
+	m_grid->kickCube(chosen, (GreedyCoords){current.x - chosen.x, 0, current.z - chosen.z});
 }

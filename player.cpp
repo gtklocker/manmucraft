@@ -99,6 +99,16 @@ void Player::update(float delta) {
 		}
 	}
 
+	// Flashlight position
+	GLfloat lightPos[] = {
+			m_x - 0.25f * sin(m_angle),
+			1.0f + m_y + (2 * PLAYER_HEIGHT) / 3.0f + 0.25f * sin(m_pitch),
+			m_z - 0.25f * cos(m_angle),
+			1.0f
+	};
+
+	glLightfv(GL_LIGHT4, GL_POSITION, lightPos);
+
 }
 
 void Player::render() {

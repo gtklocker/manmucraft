@@ -152,6 +152,15 @@ void Grid::render() {
 	}
 }
 
+void Grid::removeColumn(RealCoords col) {
+	GreedyCoords colg = transformRealToGreedy(col);
+	for (int i = 0; i < m_size; i++) {
+		if (grid[colg.x][i][colg.z]->color != MAGENTA) {
+			grid[colg.x][i][colg.z]->color = EMPTY;
+		}
+	}
+}
+
 float Grid::getCubeSize() {
 	return m_tileSize;
 }

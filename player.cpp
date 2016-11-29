@@ -270,6 +270,17 @@ void Player::placeCube() {
 	}
 }
 
+void Player::removeColumn() {
+	RealCoords crds = {m_x - (PLACE_DISTANCE) * sin(m_angle),
+			0,
+			m_z - (PLACE_DISTANCE) * cos(m_angle)
+	};
+
+	if (m_grid->getCubeAtReal(crds)) {
+		m_grid->removeColumn(crds);
+	}
+}
+
 void Player::updateView() {
 	if (!m_firstPerson) {
 		gluLookAt(

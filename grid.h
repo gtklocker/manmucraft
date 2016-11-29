@@ -30,6 +30,8 @@ private:
 	int m_size;
 	float m_tileSize;
 	Cube ****grid;
+
+	bool isGreedyCoordValid(int coord);
 public:
 	Grid(int size, float tileSize);
 	~Grid();
@@ -45,4 +47,5 @@ public:
 	Cube* getCubeAtGreedy(GreedyCoords greedy);
 	
 	float getCubeSize();
+	void kickCube(GreedyCoords start, GreedyCoords direction);
 };

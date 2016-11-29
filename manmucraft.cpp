@@ -203,6 +203,9 @@ void keypressHandler(unsigned char key, int x, int y) {
 		case 's':
 			player.moveBackwards();
 			break;
+		case 'k':
+			player.kickCube();
+			break;
 		case '1':
 			toggleLight(GL_LIGHT0);
 			break;

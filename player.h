@@ -12,6 +12,7 @@ class Player {
 private:
 	float m_x, m_y, m_z, m_angle, m_pitch;
 	float m_ySpeed;
+	int m_currentLevel, m_levelReached, m_lastLevel;
 	bool m_movingForward, m_movingBackwards;
 	bool m_firstPerson;
 	bool m_jumping;

@@ -41,7 +41,6 @@ Player::Player(float x, float y, float z, Grid *grid) {
 
 Player::~Player() { }
 
-
 void Player::update(float delta) {
 	// Check movement
 	m_ySpeed -= G * delta;
@@ -58,6 +57,12 @@ void Player::update(float delta) {
 		m_y = nextY;
 	}
 	else {
+		if (m_ySpeed < 0) {
+			if (m_currentLevel >= m_levelReached){
+				m_levelReached = m_currentLevel;
+			}
+			m_lastLevel = m_currentLevel;
+		}
 		m_ySpeed = 0;
 		m_jumping = false;
 	}
@@ -69,6 +74,9 @@ void Player::update(float delta) {
 	else if (m_movingBackwards) {
 		moveWithDirection(-1, delta);
 	}
+
+	// Level checking
+	m_currentLevel = m_y / m_grid->getCubeSize();
 
 	// Raycast selection
 	if (m_chosen) {

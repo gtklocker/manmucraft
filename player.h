@@ -11,8 +11,10 @@ using namespace std;
 class Player {
 private:
 	float m_x, m_y, m_z, m_angle, m_pitch;
+	float m_startX, m_startY, m_startZ;
 	float m_ySpeed;
 	int m_currentLevel, m_levelReached, m_lastLevel;
+	int m_lives, m_points;
 	bool m_movingForward, m_movingBackwards;
 	bool m_firstPerson;
 	bool m_jumping;
@@ -24,6 +26,7 @@ private:
 	void moveWithDirection(int direction, float delta);
 	void moveTo(RealCoords coords);
 	bool canMoveTo(RealCoords coords);
+	void death();
 public:
 	Player(float x, float y, float z, Grid *grid);
 	~Player();
@@ -42,6 +45,7 @@ public:
 	void placeCube();
 	void kickCube();
 	void removeColumn();
+	void respawn();
 	void toggleCameraView();
 	void updateView();
 

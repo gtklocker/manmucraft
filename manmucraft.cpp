@@ -157,6 +157,9 @@ void specialKeypressHandler(int key, int x, int y) {
 		case GLUT_KEY_DOWN:
 			player.moveBackwards();
 			break;
+		case GLUT_KEY_F1:
+			player.respawn();
+			break;
 		default:
 			break;
 	}

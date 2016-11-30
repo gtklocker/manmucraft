@@ -27,21 +27,33 @@ const float JUMP_SPEED = 3.0;
 const float PLAYER_HEIGHT = 0.9;
 const float G = 9.807 / 5;
 const float PLACE_DISTANCE = 1.75f;
+const int STARTING_LIVES = 3;
+const int STARTING_POINTS = 50;
 
 Player::Player(float x, float y, float z, Grid *grid) {
-	m_x = x;
-	m_y = y;
-	m_z = z;
+	m_startX = x;
+	m_startY = y;
+	m_startZ = z;
 	m_grid = grid;
 
 	m_angle = 0.0;
 	m_firstPerson = true;
 	m_ySpeed = 0.0;
+	m_points = STARTING_POINTS;
+	m_lives = STARTING_LIVES;
+	
+	respawn();
 }
 
 Player::~Player() { }
 
 void Player::update(float delta) {
+	// Level checking
+	m_currentLevel = m_y / m_grid->getCubeSize();
+	if (m_currentLevel < -2) { // -2, let him fall a bit
+		death();
+	}
+
 	// Check movement
 	m_ySpeed -= G * delta;
 	float nextY = m_y + m_ySpeed * delta;
@@ -58,9 +70,22 @@ void Player::update(float delta) {
 	}
 	else {
 		if (m_ySpeed < 0) {
-			if (m_currentLevel >= m_levelReached){
+			if (m_currentLevel > m_levelReached) {
+				m_points += (m_currentLevel - m_levelReached) * 5;
 				m_levelReached = m_currentLevel;
+				if (m_levelReached == m_grid->getGridSize() - 1) {
+					m_lives++;
+					m_points += 100;
+				}
 			}
+			else if (m_lastLevel - m_currentLevel > 1) {
+				m_points -= (m_lastLevel - (m_currentLevel + 1)) * 5;
+				if (m_points < 0) {
+					m_points = STARTING_POINTS;
+					death();
+				}
+			}
+
 			m_lastLevel = m_currentLevel;
 		}
 		m_ySpeed = 0;
@@ -74,9 +99,6 @@ void Player::update(float delta) {
 	else if (m_movingBackwards) {
 		moveWithDirection(-1, delta);
 	}
-
-	// Level checking
-	m_currentLevel = m_y / m_grid->getCubeSize();
 
 	// Raycast selection
 	if (m_chosen) {
@@ -253,6 +275,11 @@ void Player::pickUpCube() {
 	if (m_chosen && m_chosen->color != MAGENTA) {
 		m_reserve.push_back(Cube(m_chosen->color));
 		m_chosen->color = EMPTY;
+		m_points -= 5;
+		if (m_points < 0) {
+			m_points = STARTING_POINTS;
+			death();
+		}
 	}
 }
 
@@ -266,6 +293,7 @@ void Player::placeCube() {
 		if (front && front->color == EMPTY) {
 			front->color = m_reserve.back().color;
 			m_reserve.pop_back();
+			m_points += 5;
 		}
 	}
 }
@@ -279,6 +307,19 @@ void Player::removeColumn() {
 	if (m_grid->getCubeAtReal(crds)) {
 		m_grid->removeColumn(crds);
 	}
+}
+
+void Player::respawn() {
+	m_x = m_startX;
+	m_y = m_startY;
+	m_z = m_startZ;
+	m_currentLevel = 0;
+}
+
+void Player::death() {
+	m_lives--;
+	respawn();
+	//TODO:Death screen if lives < 0
 }
 
 void Player::updateView() {
@@ -320,8 +361,10 @@ char* Player::getHUDString() {
 	sprintf(buffer,
 		"Level: %d\n"
 		"Max level reached: %d\n"
-		"Meaning of life: %d\n"
-		, m_currentLevel, m_levelReached, 42);
+		"Cubes: %d\n"
+		"Points: %d\n"
+		"Lives: %d\n"
+		, m_currentLevel, m_levelReached, (int)m_reserve.size(), m_points, m_lives);
 	return buffer;
 }
 

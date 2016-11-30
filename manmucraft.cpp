@@ -206,6 +206,9 @@ void keypressHandler(unsigned char key, int x, int y) {
 		case 'k':
 			player.kickCube();
 			break;
+		case 'e':
+			player.removeColumn();
+			break;
 		case '1':
 			toggleLight(GL_LIGHT0);
 			break;

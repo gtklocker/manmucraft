@@ -41,6 +41,7 @@ public:
 	void pickUpCube();
 	void placeCube();
 	void kickCube();
+	void removeColumn();
 	void toggleCameraView();
 	void updateView();
 

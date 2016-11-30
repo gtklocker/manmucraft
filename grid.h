@@ -45,6 +45,8 @@ public:
 	GreedyCoords transformRealToGreedy(RealCoords real);
 	Cube* getCubeAtReal(RealCoords real);
 	Cube* getCubeAtGreedy(GreedyCoords greedy);
+
+	void removeColumn(RealCoords col);
 	
 	float getCubeSize();
 	void kickCube(GreedyCoords start, GreedyCoords direction);

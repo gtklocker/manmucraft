@@ -13,6 +13,7 @@ private:
 	float m_x, m_y, m_z, m_angle, m_pitch;
 	float m_startX, m_startY, m_startZ;
 	float m_ySpeed;
+	float m_animationTimer;
 	int m_currentLevel, m_levelReached, m_lastLevel;
 	int m_lives, m_points;
 	bool m_movingForward, m_movingBackwards;

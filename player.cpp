@@ -29,6 +29,7 @@ const float G = 9.807 / 5;
 const float PLACE_DISTANCE = 1.75f;
 const int STARTING_LIVES = 3;
 const int STARTING_POINTS = 50;
+const float ANIMATION_TIME = 1.25f;
 
 Player::Player(float x, float y, float z, Grid *grid) {
 	m_startX = x;
@@ -43,6 +44,7 @@ Player::Player(float x, float y, float z, Grid *grid) {
 	m_lives = STARTING_LIVES;
 	
 	respawn();
+	m_animationTimer = 0.0f;
 }
 
 Player::~Player() { }
@@ -133,6 +135,16 @@ void Player::update(float delta) {
 
 	glLightfv(GL_LIGHT4, GL_POSITION, lightPos);
 
+	if (m_movingForward) {
+		m_animationTimer += delta;
+	}
+	else {
+		m_animationTimer -= delta;
+	}
+
+	if (!m_movingForward && !m_movingBackwards) {
+		m_animationTimer = 0;
+	}
 }
 
 void Player::render() {
@@ -147,9 +159,15 @@ void Player::render() {
 	glPushMatrix();
 	glTranslatef(0.125, 0.0, 0.0);
 	glScalef(1.0, 1.5, 1.0);
+	glPushMatrix();
+	glRotatef(50 * sin(m_animationTimer / ANIMATION_TIME), 1.0, 0.0, 0.0);
 	glutSolidCube(0.15);
+	glPopMatrix();
 	glTranslatef(-0.25, 0.0, 0.0);
+	glPushMatrix();
+	glRotatef(-50 * sin(m_animationTimer / ANIMATION_TIME), 1.0, 0.0, 0.0);
 	glutSolidCube(0.15);
+	glPopMatrix();
 	glPopMatrix();
 	
 	// Body
@@ -164,11 +182,17 @@ void Player::render() {
 	//Hands
 	glColor3f(0.75, 1.0, 0.0);
 	glPushMatrix();
-	glTranslatef(-0.25, 0.0, 0.25);
-	glScalef(1.0, 1.0, 2.5);
+	glTranslatef(-0.25, 0.0, 0.0);
+	glScalef(1.0, 2.5, 1.0);
+	glPushMatrix();
+	glRotatef(50 * sin(m_animationTimer / ANIMATION_TIME), 1.0, 0.0, 0.0);
 	glutSolidCube(0.125);
+	glPopMatrix();
 	glTranslatef(0.5, 0.0, 0.0);
+	glPushMatrix();
+	glRotatef(-50 * sin(m_animationTimer / ANIMATION_TIME), 1.0, 0.0, 0.0);
 	glutSolidCube(0.15);
+	glPopMatrix();
 	glPopMatrix();
 	glPopMatrix();
 

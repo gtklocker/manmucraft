@@ -17,8 +17,9 @@ float distanceRealCoords(RealCoords &r1, RealCoords &r2) {
 
 const float MOVE_ANGLE = .025;
 const float MOVE_SPEED = 1.0;
+const float CAMERA_CHANGE_SPEED = 0.75;
 const float TP_RADIUS = 1.5;
-const float FP_RADIUS = 0.50;
+const float FP_RADIUS = 0.085;
 const float RAY_LENGTH = 2.0;
 const float PITCH_UP_LIMIT = 1.5;
 const float PITCH_DOWN_LIMIT = -3.0;
@@ -39,6 +40,7 @@ Player::Player(float x, float y, float z, Grid *grid) {
 
 	m_angle = 0.0;
 	m_firstPerson = true;
+	m_cameraRadius = FP_RADIUS;
 	m_ySpeed = 0.0;
 	m_points = STARTING_POINTS;
 	m_lives = STARTING_LIVES;
@@ -50,6 +52,19 @@ Player::Player(float x, float y, float z, Grid *grid) {
 Player::~Player() { }
 
 void Player::update(float delta) {
+	if (m_firstPerson) {
+		m_cameraRadius -= CAMERA_CHANGE_SPEED * delta;
+		if (m_cameraRadius < FP_RADIUS) {
+			m_cameraRadius = FP_RADIUS;
+		}
+	}
+	else {
+		m_cameraRadius += CAMERA_CHANGE_SPEED * delta;
+		if (m_cameraRadius > TP_RADIUS) {
+			m_cameraRadius = TP_RADIUS;
+		}
+	}
+
 	// Level checking
 	m_currentLevel = m_y / m_grid->getCubeSize();
 	if (m_currentLevel < -2) { // -2, let him fall a bit
@@ -348,36 +363,24 @@ void Player::death() {
 }
 
 void Player::updateView() {
-	if (!m_firstPerson) {
-		gluLookAt(
-			-(TP_RADIUS * sin(M_PI + m_angle)) + m_x,
-			m_y + 2.0,
-			-(TP_RADIUS * cos(M_PI + m_angle)) + m_z,
+	gluLookAt(
+		((m_cameraRadius * sin(M_PI + m_angle))) 
+			- (1.5 * (m_cameraRadius * sin(M_PI + m_angle))) 
+			* ((m_cameraRadius - FP_RADIUS / (TP_RADIUS - FP_RADIUS))) + m_x,
+		m_y + 0.9 + 1.1 * ((m_cameraRadius - FP_RADIUS) / (TP_RADIUS - FP_RADIUS)),
+		(m_cameraRadius * cos(M_PI + m_angle))
+			- (1.5 * (m_cameraRadius * cos(M_PI + m_angle))) 
+			* ((m_cameraRadius - FP_RADIUS / (TP_RADIUS - FP_RADIUS))) + m_z,
 
-			m_x,
-			m_y + 1.0 + m_pitch,
-			m_z,
+		m_x - 1.0 * sin(m_angle),
+		m_y + 1.0 + m_pitch,
+		m_z - 1.0 * cos(m_angle),
 
-			0.0,
-			1.0,
-			0.0
-		);
-	}
-	else {
-		gluLookAt(
-			(FP_RADIUS * sin(M_PI + m_angle)) + m_x,
-			m_y + 0.9,
-			(FP_RADIUS * cos(M_PI + m_angle)) + m_z,
+		0.0,
+		1.0,
+		0.0
+	);
 
-			m_x - 1.0 * sin(m_angle),
-			m_y + 1.0 + m_pitch,
-			m_z - 1.0 * cos(m_angle),
-
-			0.0,
-			1.0,
-			0.0
-		);
-	}
 }
 
 char* Player::getHUDString() {

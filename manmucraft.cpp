@@ -49,6 +49,7 @@ void update(float delta) {
 		glutWarpPointer(lastX, lastY);
 	}
 
+	grid.update(delta);
 	player.update(delta);
 }
 
@@ -211,6 +212,9 @@ void keypressHandler(unsigned char key, int x, int y) {
 			break;
 		case 'e':
 			player.removeColumn();
+			break;
+		case 'r':
+			grid.dropCubes();
 			break;
 		case '1':
 			toggleLight(GL_LIGHT0);

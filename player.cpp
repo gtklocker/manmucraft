@@ -59,15 +59,16 @@ void Player::update(float delta) {
 	// Check movement
 	m_ySpeed -= G * delta;
 	float nextY = m_y + m_ySpeed * delta;
-	Cube *next;
+
+	RealCoords nextCoords;
 	if (m_ySpeed > 0){
-		next = m_grid->getCubeAtReal((RealCoords){m_x, nextY + PLAYER_HEIGHT + Y_DIST, m_z});	
+		nextCoords = (RealCoords){m_x, nextY + PLAYER_HEIGHT + Y_DIST, m_z};
 	}
 	else {
-		next = m_grid->getCubeAtReal((RealCoords){m_x, nextY - Y_DIST, m_z});
+		nextCoords = (RealCoords){m_x, nextY - Y_DIST, m_z};
 	}
 
-	if (next == NULL || next->color == EMPTY) {
+	if (canMoveTo(nextCoords)) {
 		m_y = nextY;
 	}
 	else {

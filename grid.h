@@ -50,4 +50,5 @@ public:
 	
 	float getCubeSize();
 	void kickCube(GreedyCoords start, GreedyCoords direction);
+	int getGridSize();
 };

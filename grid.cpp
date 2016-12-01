@@ -182,3 +182,7 @@ void Grid::kickCube(GreedyCoords start, GreedyCoords direction) {
 		prevCube = *cbPtr;
 	}
 }
+
+int Grid::getGridSize() {
+	return m_size;
+}

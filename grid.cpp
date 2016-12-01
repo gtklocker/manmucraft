@@ -94,10 +94,14 @@ bool Grid::doCollide(RealCoords a, GreedyCoords b) {
 		return false;
 	}
 
-	float laxTileSize = 1.25 * m_tileSize;
+	float laxTileSize = 0.707106781 * m_tileSize;
 
 	RealCoords rb = transformGreedyToReal(b);
-	if (abs(a.x - rb.x) * abs(a.x - rb.x) + abs(a.z - rb.z) * abs(a.z - rb.z) <= laxTileSize * laxTileSize) {
+
+	if (abs(a.y - rb.y) > m_tileSize / 2) {
+		return false;
+	}
+	if (abs(a.x - rb.x) * abs(a.x - rb.x) + abs(a.z - rb.z) * abs(a.z - rb.z) < laxTileSize * laxTileSize) {
 		return true;
 	}
 

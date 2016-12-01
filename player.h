@@ -15,6 +15,7 @@ private:
 	float m_ySpeed;
 	float m_animationTimer;
 	float m_cameraRadius;
+	float m_cameraShake;
 	int m_currentLevel, m_levelReached, m_lastLevel;
 	int m_lives, m_points;
 	bool m_movingForward, m_movingBackwards;

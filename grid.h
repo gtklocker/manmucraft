@@ -51,6 +51,8 @@ public:
 
 	void removeColumn(RealCoords col);
 	void dropCubes();
+
+	bool placeCube(RealCoords pos, Color c);
 	
 	float getCubeSize();
 	void kickCube(GreedyCoords start, GreedyCoords direction);

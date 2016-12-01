@@ -211,6 +211,17 @@ bool Grid::isGreedyCoordValid(int coord) {
 	return coord >= 0 && coord < m_size;
 }
 
+bool Grid::placeCube(RealCoords pos, Color c) {
+	GreedyCoords posg = transformRealToGreedy(pos);
+	for (int i = 0; i < m_size; i++) {
+		if (grid[posg.x][i][posg.z]->color == EMPTY) {
+			grid[posg.x][i][posg.z]->color = c;
+			return true;
+		}
+	}
+	return false;
+}
+
 void Grid::kickCube(GreedyCoords start, GreedyCoords direction) {
 	direction.x = direction.x != 0 ? (direction.x / abs(direction.x)) : 0;
 	direction.z = direction.z != 0 ? (direction.z / abs(direction.z)) : 0;

@@ -3,6 +3,8 @@
 #include <cmath>
 #include "grid.h"
 
+const float DROP_TIME = 0.75f;
+
 Cube::Cube(Color c){
 	color = c;
 }
@@ -37,6 +39,15 @@ Grid::Grid(int size, float tileSize) {
 	for (int j = 0; j < m_size / 2; ++j) {
 		grid[j][1][2] = new Cube(RED);
 	}
+
+	// These are for testing but make sure 
+	// the grid has at least size 10
+	grid[3][3][3]->color = RED;
+	grid[4][6][2]->color = RED;
+	grid[4][7][2]->color = RED;
+	grid[8][6][9]->color = RED;
+	grid[7][7][7]->color = RED;
+	grid[1][9][5]->color = RED;
 }
 
 Grid::~Grid() { 
@@ -53,7 +64,14 @@ Grid::~Grid() {
 }	
 
 void Grid::update(float delta) {
-
+	if (m_layersToDrop > 0) {
+		m_dropTimer += delta;
+		if (m_dropTimer >= DROP_TIME) {
+			dropLayer();
+			m_layersToDrop--;
+			m_dropTimer -= DROP_TIME;
+		}
+	}
 }
 
 // We having two systems of coordinates here,
@@ -161,6 +179,26 @@ void Grid::removeColumn(RealCoords col) {
 	for (int i = 0; i < m_size; i++) {
 		if (grid[colg.x][i][colg.z]->color != MAGENTA) {
 			grid[colg.x][i][colg.z]->color = EMPTY;
+		}
+	}
+}
+
+void Grid::dropCubes() {
+	m_layersToDrop = m_size - 1;
+	m_dropTimer = 0.0f;
+}
+
+void Grid::dropLayer() {
+	for (int i = 0; i < m_layersToDrop; i++) {
+		for (int j = 0; j < m_size; j++) {
+			for (int k = 0; k < m_size; k++) {
+				Cube *cur = grid[j][i][k];
+				Cube *top = grid[j][i + 1][k];
+				if (cur->color == EMPTY && top->color != EMPTY){
+					cur->color = top->color;
+					top->color = EMPTY;
+				}
+			}
 		}
 	}
 }

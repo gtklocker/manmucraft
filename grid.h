@@ -28,10 +28,13 @@ struct RealCoords {
 class Grid {
 private:
 	int m_size;
+	int m_layersToDrop;
 	float m_tileSize;
+	float m_dropTimer;
 	Cube ****grid;
 
 	bool isGreedyCoordValid(int coord);
+	void dropLayer();
 public:
 	Grid(int size, float tileSize);
 	~Grid();
@@ -47,6 +50,7 @@ public:
 	Cube* getCubeAtGreedy(GreedyCoords greedy);
 
 	void removeColumn(RealCoords col);
+	void dropCubes();
 	
 	float getCubeSize();
 	void kickCube(GreedyCoords start, GreedyCoords direction);

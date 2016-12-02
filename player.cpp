@@ -65,6 +65,11 @@ void Player::update(float delta) {
 		}
 	}
 
+	m_cameraShake += 0.075 * delta;
+	if (!m_firstPerson || (!m_movingForward && !m_movingBackwards)) {
+		m_cameraShake = 0;
+	}
+
 	// Level checking
 	m_currentLevel = m_y / m_grid->getCubeSize();
 	if (m_currentLevel < -2) { // -2, let him fall a bit
@@ -367,7 +372,8 @@ void Player::updateView() {
 		((m_cameraRadius * sin(M_PI + m_angle))) 
 			- (1.5 * (m_cameraRadius * sin(M_PI + m_angle))) 
 			* ((m_cameraRadius - FP_RADIUS / (TP_RADIUS - FP_RADIUS))) + m_x,
-		m_y + 0.9 + 1.1 * ((m_cameraRadius - FP_RADIUS) / (TP_RADIUS - FP_RADIUS)),
+		m_y  + 0.015 * sin(m_cameraShake / 0.015) + 0.9 
+		+ 1.1 * ((m_cameraRadius - FP_RADIUS) / (TP_RADIUS - FP_RADIUS)),
 		(m_cameraRadius * cos(M_PI + m_angle))
 			- (1.5 * (m_cameraRadius * cos(M_PI + m_angle))) 
 			* ((m_cameraRadius - FP_RADIUS / (TP_RADIUS - FP_RADIUS))) + m_z,
@@ -380,7 +386,6 @@ void Player::updateView() {
 		1.0,
 		0.0
 	);
-
 }
 
 char* Player::getHUDString() {

@@ -323,7 +323,21 @@ void Player::jump() {
 
 void Player::pickUpCube() {
 	if (m_chosen && m_chosen->color != MAGENTA) {
-		m_reserve.push_back(Cube(m_chosen->color));
+		int cubesWon = 0;
+		switch (m_chosen->color) {
+			case YELLOW:
+				cubesWon = 1;
+				break;
+			case RED:
+				cubesWon = 2;
+				break;
+			case GREEN:
+				cubesWon = 3;
+				break;
+		}
+		for (int i = 0; i < cubesWon; ++i) {
+			m_reserve.push_back(Cube(m_chosen->color));
+		}
 		m_chosen->color = EMPTY;
 		m_points -= 5;
 		if (m_points < 0) {

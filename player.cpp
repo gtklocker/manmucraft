@@ -355,6 +355,12 @@ void Player::removeColumn() {
 
 	if (m_grid->getCubeAtReal(crds)) {
 		m_grid->removeColumn(crds);
+		m_lives++;
+		m_points -= 20;
+		if (m_points < 0) {
+			m_points = STARTING_POINTS;
+			death();
+		}
 	}
 }
 

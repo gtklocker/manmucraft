@@ -36,20 +36,6 @@ Grid::Grid(int size, float tileSize) {
 	}
 
 	resetCubes();
-
-	// TODO Remove, for debugging only
-	for (int j = 0; j < m_size / 2; ++j) {
-		grid[j][1][2] = new Cube(RED);
-	}
-
-	// These are for testing but make sure 
-	// the grid has at least size 10
-	grid[3][3][3]->color = RED;
-	grid[4][6][2]->color = RED;
-	grid[4][7][2]->color = RED;
-	grid[8][6][9]->color = RED;
-	grid[7][7][7]->color = RED;
-	grid[1][9][5]->color = RED;
 }
 
 Grid::~Grid() { 

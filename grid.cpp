@@ -29,21 +29,13 @@ Grid::Grid(int size, float tileSize) {
 			m_trippyRand[i][j] = new int [size];
 
 			for (int k = 0; k < size; ++k){
-				Color randomColor = Color(rand() % MAGENTA);
-				if (j == 0) {
-					grid[i][j][k] = new Cube(randomColor);
-					if (i == size / 2 && k == size / 2) {
-						grid[i][j][k] = new Cube(MAGENTA);
-					}
-				}
-				else {
-					grid[i][j][k] = new Cube(EMPTY);
-				}
-
+				grid[i][j][k] = new Cube(EMPTY);
 				m_trippyRand[i][j][k] = rand() % 10;
 			}
 		}
 	}
+
+	resetCubes();
 
 	// TODO Remove, for debugging only
 	for (int j = 0; j < m_size / 2; ++j) {
@@ -267,4 +259,24 @@ int Grid::getGridSize() {
 
 void Grid::toggleTrippy() {
 	m_trippyMode = !m_trippyMode;
+}
+
+void Grid::resetCubes() {
+	for (int i = 0; i < m_size; i++) {
+		for (int j = 0; j < m_size; j++) {
+			for (int k = 0; k < m_size; k++) {
+				if (j == 0) {
+					Color randomColor = Color(rand() % MAGENTA);
+					grid[i][j][k]->color = randomColor;
+					if (i == m_size / 2 && k == m_size / 2) {
+						grid[i][j][k]->color = MAGENTA;
+					}
+				}
+				else {
+					grid[i][j][k]->color = EMPTY;
+				}
+			}
+		}
+	}
+
 }

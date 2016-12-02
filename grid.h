@@ -65,4 +65,5 @@ public:
 	int getGridSize();
 
 	void toggleTrippy();
+	void resetCubes();
 };

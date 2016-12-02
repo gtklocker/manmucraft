@@ -169,7 +169,7 @@ void render() {
 
 	// Show fps and tps every second
 	if (glutGet(GLUT_ELAPSED_TIME) >= timer + 1000) {
-		cout << "FPS :" << frames << " TPS :" << ticks << endl;
+		cout << "FPS: " << frames << ", TPS: " << ticks << endl;
 		frames = 0;
 		ticks = 0;
 		timer += 1000;
@@ -355,7 +355,7 @@ int main(int argc, char *argv[]) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	glutCreateWindow("Manmucraft!");
+	glutCreateWindow("manmucraft");
 
 	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

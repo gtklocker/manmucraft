@@ -9,6 +9,7 @@
 #include "grid.h"
 #include "player.h"
 #include "lighting.h"
+#include "text.h"
 
 using namespace std;
 
@@ -23,9 +24,6 @@ const int DEFAULT_GRID_SIZE = 10;
 const int TILE_SIZE = 1.0;
 
 int GRID_SIZE = DEFAULT_GRID_SIZE;
-
-#define BITMAP_FONT GLUT_BITMAP_9_BY_15
-const int BITMAP_W = 9, BITMAP_H = 15;
 
 int timer;
 int oldTime;
@@ -43,6 +41,45 @@ float lastY;
 Grid *grid;
 Player *player;
 
+Text HUD(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+char *helpText = new char[2048];
+TextScreen helpScreen(
+	""
+	"Welcome to manmucraft! You can use the mouse to look around.\n"
+	"\n"
+	"Here are the keys you can use to play:\n"
+	"w           move forward\n"
+	"s           move backwards\n"
+	"a           look left\n"
+	"d           look right\n"
+	"Space       jump\n"
+	"\n"
+	"q           kick cubes\n"
+	"e           remove a column\n"
+	"r           drop cubes\n"
+	"p           respawn\n"
+	"f           toggle the flashlight\n"
+	"1-4         toggle the lights\n"
+	"\n"
+	"v           switch between first and third person mode\n"
+	"F2          fullscreen\n"
+	"?           close this menu\n"
+	"Esc         quit\n"
+	"\n"
+	"You can also use the following mouse keys:\n"
+	"Left click  pick up selected cube\n"
+	"Right click place the last cube you picked\n"
+	"\n"
+	"Be careful what you type, you might 'trip' on an easter egg ;)\n"
+	"\n"
+	"You can always get back to this menu by pressing ?\n"
+	"\n"
+	"Go ahead and press ? to start playing.\n", WINDOW_WIDTH, WINDOW_HEIGHT);
+
+bool showHelpScreen = false, renderHelpScreen = false;
+bool isPaused = false;
+
 const char *TRIP_STRING = "trip";
 int tripIndex = 0;
 
@@ -59,8 +96,28 @@ void update(float delta) {
 		glutWarpPointer(lastX, lastY);
 	}
 
+	if (renderHelpScreen) {
+		if (helpScreen.update(delta)) {
+			return;
+		}
+		else {
+			if (!showHelpScreen) {
+				renderHelpScreen = false;
+			}
+		}
+	}
+
 	grid->update(delta);
 	player->update(delta);
+}
+
+void drawHUD() {
+	char *hudText = player->getHUDString();
+	HUD.onTextChange(hudText);
+
+	delete[] hudText;
+
+	HUD.render();
 }
 
 void draw() {
@@ -68,63 +125,32 @@ void draw() {
 	glLoadIdentity();
 	player->updateView();
 	glPushMatrix();	
-
 	grid->render();
 	player->render();
-
 	glPopMatrix();
-}
 
-void drawText(char text[]) {
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	gluOrtho2D(0.0, currentWindowWidth, currentWindowHeight, 0.0);
-
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
-
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_LIGHTING);
-	glColor4f(1.0, 1.0, 1.0, 1.0);
-
-	int linesBefore = 0;
-	glRasterPos2i(BITMAP_W, BITMAP_H * (linesBefore + 1));
-	for (int i = 0; i < strlen(text); ++i) {
-		if (text[i] == '\n') {
-			glRasterPos2i(BITMAP_W, BITMAP_H * (++linesBefore + 1));
-		}
-		else {
-			glutBitmapCharacter(BITMAP_FONT, text[i]);
-		}
+	if (!renderHelpScreen) {
+		drawHUD();
 	}
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_LIGHTING);
-
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
+	else {
+		helpScreen.render();
+	}
 }
 
 // Called on start or when the window dimensions change
 void reshapeHandler(int w, int h) {
 	currentWindowWidth = w;
 	currentWindowHeight = h;
+
+	HUD.onResolutionChange(w, h);
+	helpScreen.onResolutionChange(w, h);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glViewport(0.0, 0.0, (GLsizei) w, (GLsizei) h);
 	gluPerspective(60, (GLfloat) w / (GLfloat) h, 0.1, 1000);
 }
 
-void drawHUD() {
-	char *hud = player->getHUDString();
-
-	drawText(hud);
-
-	delete[] hud;
-}
 
 void render() {
 	newTime = glutGet(GLUT_ELAPSED_TIME);
@@ -140,7 +166,6 @@ void render() {
 	// render game
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	draw();	
-	drawHUD();
 
 	glutSwapBuffers();
 	frames++;
@@ -164,6 +189,20 @@ void toggleFullscreen() {
 
 	}
 	isFullscreen = !isFullscreen;
+}
+
+void toggleHelpScreen() {
+	renderHelpScreen = true;
+	isPaused = !isPaused;
+
+	if (showHelpScreen) {
+		helpScreen.hide();
+		showHelpScreen = false;
+	}
+	else {
+		helpScreen.show();
+		showHelpScreen = true;
+	}
 }
 
 void specialKeypressHandler(int key, int x, int y) {
@@ -206,6 +245,17 @@ void keypressHandler(unsigned char key, int x, int y) {
 		case 27: // Escape
 			exit(0);
 			break;
+		case '?':
+		case '/':
+			toggleHelpScreen();
+			break;
+	}
+
+	if (isPaused) {
+		return;
+	}
+
+	switch (key) {
 		case 'v':
 			// toggle camera view
 			player->toggleCameraView();
@@ -269,6 +319,10 @@ void keyReleaseHandler(unsigned char key, int x, int y) {
 }
 
 void mouseMoveHandler(int x, int y) {
+	if (isPaused) {
+		return;
+	}
+
 	if (x > lastX) {
 		player->turnRight();
 	}
@@ -341,5 +395,6 @@ int main(int argc, char *argv[]) {
 	oldTime = glutGet(GLUT_ELAPSED_TIME);	
 	glutWarpPointer(lastX, lastY);
 
+	toggleHelpScreen();
 	glutMainLoop();
 }

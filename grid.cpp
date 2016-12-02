@@ -2,6 +2,7 @@
 #include <ctime>
 #include <cmath>
 #include "grid.h"
+#include "debug.h"
 
 const float DROP_TIME = 0.75f;
 
@@ -164,8 +165,10 @@ void Grid::render() {
 				glPushMatrix();
 				glTranslatef(0.0, 0.0, k * m_tileSize);
 				glutSolidCube(m_tileSize);
-				glColor3f(0.0, 1.0, 1.0);
-				glutWireCube(m_tileSize);
+				DEBUG({
+					glColor3f(0.0, 1.0, 1.0);
+					glutWireCube(m_tileSize);
+				});
 				glPopMatrix();
 			}
 			glPopMatrix();

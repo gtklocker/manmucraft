@@ -22,4 +22,4 @@ test: grid_test
 	./grid_test
 
 run: build
-	./manmucraft
+	./manmucraft ${N}

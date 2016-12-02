@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <GL/glut.h>
@@ -15,13 +16,13 @@ const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 600;
 int currentWindowWidth;
 int currentWindowHeight;
+
 const float STEP = 60.0 / 1000.0; // 60 ticks per 1000 ms
 
-const int GRID_SIZE = 10;
+const int DEFAULT_GRID_SIZE = 10;
 const int TILE_SIZE = 1.0;
-const float P_START_POS_X = GRID_SIZE / 2;
-const float P_START_POS_Y = 0.5;
-const float P_START_POS_Z = GRID_SIZE / 2;
+
+int GRID_SIZE = DEFAULT_GRID_SIZE;
 
 #define BITMAP_FONT GLUT_BITMAP_9_BY_15
 const int BITMAP_W = 9, BITMAP_H = 15;
@@ -30,6 +31,7 @@ int timer;
 int oldTime;
 int newTime;
 float delta;
+
 int frames;
 int ticks;
 
@@ -38,8 +40,13 @@ bool isFullscreen = false;
 float lastX;
 float lastY;
 
-Grid grid(GRID_SIZE, TILE_SIZE);
-Player player(P_START_POS_X, P_START_POS_Y, P_START_POS_Z, &grid);
+Grid *grid;
+Player *player;
+
+void initWorld(int gridSize) {
+	grid = new Grid(gridSize, TILE_SIZE);
+	player = new Player(gridSize / 2, .5, gridSize / 2, grid);
+}
 
 void update(float delta) {
 	if (lastX > currentWindowWidth - 100 || lastX < 100
@@ -49,18 +56,18 @@ void update(float delta) {
 		glutWarpPointer(lastX, lastY);
 	}
 
-	grid.update(delta);
-	player.update(delta);
+	grid->update(delta);
+	player->update(delta);
 }
 
 void draw() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	player.updateView();
+	player->updateView();
 	glPushMatrix();	
 
-	grid.render();
-	player.render();
+	grid->render();
+	player->render();
 
 	glPopMatrix();
 }
@@ -109,7 +116,7 @@ void reshapeHandler(int w, int h) {
 }
 
 void drawHUD() {
-	char *hud = player.getHUDString();
+	char *hud = player->getHUDString();
 
 	drawText(hud);
 
@@ -159,16 +166,16 @@ void toggleFullscreen() {
 void specialKeypressHandler(int key, int x, int y) {
 	switch (key) {
 		case GLUT_KEY_LEFT:
-			player.turnLeft();
+			player->turnLeft();
 			break;
 		case GLUT_KEY_RIGHT:
-			player.turnRight();
+			player->turnRight();
 			break;
 		case GLUT_KEY_UP:
-			player.moveForward();
+			player->moveForward();
 			break;
 		case GLUT_KEY_DOWN:
-			player.moveBackwards();
+			player->moveBackwards();
 			break;
 		case GLUT_KEY_F2:
 			toggleFullscreen();
@@ -185,37 +192,37 @@ void keypressHandler(unsigned char key, int x, int y) {
 			break;
 		case 'v':
 			// toggle camera view
-			player.toggleCameraView();
+			player->toggleCameraView();
 			break;
 		case ' ':
-			player.jump();
+			player->jump();
 			break;
 		case 'a':
-			player.turnLeft();
+			player->turnLeft();
 			break;
 		case 'd':
-			player.turnRight();
+			player->turnRight();
 			break;
 		case 'w':
-			player.moveForward();
+			player->moveForward();
 			break;
 		case 's':
-			player.moveBackwards();
+			player->moveBackwards();
 			break;
 		case 'q':
-			player.kickCube();
+			player->kickCube();
 			break;
 		case 'e':
-			player.removeColumn();
+			player->removeColumn();
 			break;
 		case 'r':
-			grid.dropCubes();
+			grid->dropCubes();
 			break;
 		case 'f':
 			toggleLight(GL_LIGHT4);
 			break;
 		case 'p':
-			player.respawn();
+			player->respawn();
 			break;
 		case '1':
 			toggleLight(GL_LIGHT0);
@@ -237,27 +244,27 @@ void keypressHandler(unsigned char key, int x, int y) {
 void keyReleaseHandler(unsigned char key, int x, int y) {
 	switch (key) {
 		case 'w':
-			player.stopMovingForward();
+			player->stopMovingForward();
 			break;
 		case 's':
-			player.stopMovingBackwards();
+			player->stopMovingBackwards();
 			break;
 	}
 }
 
 void mouseMoveHandler(int x, int y) {
 	if (x > lastX) {
-		player.turnRight();
+		player->turnRight();
 	}
 	else if (x < lastX) {
-		player.turnLeft();
+		player->turnLeft();
 	}
 
 	if (y > lastY) {
-		player.lookUp();
+		player->lookUp();
 	}
 	else if (y < lastY) {
-		player.lookDown();
+		player->lookDown();
 	}
 	lastX = x;
 	lastY = y;
@@ -265,15 +272,22 @@ void mouseMoveHandler(int x, int y) {
 
 void mouseClickHandler(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		player.pickUpCube();
+		player->pickUpCube();
 	}
 
 	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
-		player.placeCube();
+		player->placeCube();
 	}
 }
 
 int main(int argc, char *argv[]) {
+	int gridSize = DEFAULT_GRID_SIZE;
+	if (argc > 1) {
+		sscanf(argv[argc - 1], "%d", &gridSize);
+	}
+
+	initWorld(gridSize);
+
 	timer = 0;
 	newTime = 0;
 	delta = 0.0;

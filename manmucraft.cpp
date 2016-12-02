@@ -144,6 +144,18 @@ void render() {
 	}
 }
 
+void toggleFullscreen() {
+	if (isFullscreen) {
+		glutPositionWindow(0, 0);
+		glutReshapeWindow(WINDOW_WIDTH, WINDOW_HEIGHT);
+	}
+	else {
+		glutFullScreen();
+
+	}
+	isFullscreen = !isFullscreen;
+}
+
 void specialKeypressHandler(int key, int x, int y) {
 	switch (key) {
 		case GLUT_KEY_LEFT:
@@ -158,35 +170,18 @@ void specialKeypressHandler(int key, int x, int y) {
 		case GLUT_KEY_DOWN:
 			player.moveBackwards();
 			break;
-		case GLUT_KEY_F1:
-			player.respawn();
+		case GLUT_KEY_F2:
+			toggleFullscreen();
 			break;
 		default:
 			break;
 	}
 }
 
-void toggleFullscreen() {
-	if (isFullscreen) {
-		glutPositionWindow(0, 0);
-		glutReshapeWindow(WINDOW_WIDTH, WINDOW_HEIGHT);
-	}
-	else {
-		glutFullScreen();
-
-	}
-	isFullscreen = !isFullscreen;
-}
-
 void keypressHandler(unsigned char key, int x, int y) {
 	switch (key) {
-		case 'q':
-			// quit the game
+		case 27: // Escape
 			exit(0);
-			break;
-		case 'f':
-			// toggle fullscreen
-			toggleFullscreen();
 			break;
 		case 'v':
 			// toggle camera view
@@ -207,7 +202,7 @@ void keypressHandler(unsigned char key, int x, int y) {
 		case 's':
 			player.moveBackwards();
 			break;
-		case 'k':
+		case 'q':
 			player.kickCube();
 			break;
 		case 'e':
@@ -215,6 +210,12 @@ void keypressHandler(unsigned char key, int x, int y) {
 			break;
 		case 'r':
 			grid.dropCubes();
+			break;
+		case 'f':
+			toggleLight(GL_LIGHT4);
+			break;
+		case 'p':
+			player.respawn();
 			break;
 		case '1':
 			toggleLight(GL_LIGHT0);
@@ -227,9 +228,6 @@ void keypressHandler(unsigned char key, int x, int y) {
 			break;
 		case '4':
 			toggleLight(GL_LIGHT3);
-			break;
-		case '5':
-			toggleLight(GL_LIGHT4);
 			break;
 		default:
 			break;

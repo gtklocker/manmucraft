@@ -1,6 +1,6 @@
 CC = g++
 
-GCCFLAGS = -fpcc-struct-return
+GCCFLAGS = -fpcc-struct-return -std=c++11
 CFLAGS = -g
 INCLUDE = -I/usr/include
 LDFLAGS = -L/usr/lib/

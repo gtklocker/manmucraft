@@ -89,12 +89,9 @@ void initWorld(int gridSize) {
 }
 
 void update(float delta) {
-	if (lastX > currentWindowWidth - 100 || lastX < 100
-		|| lastY > currentWindowHeight - 100 || lastY < 100){
-		lastX = currentWindowWidth / 2;
-		lastY = currentWindowHeight / 2;
-		glutWarpPointer(lastX, lastY);
-	}
+	lastX = currentWindowWidth / 2;
+	lastY = currentWindowHeight / 2;
+	glutWarpPointer(lastX, lastY);
 
 	if (renderHelpScreen) {
 		if (helpScreen.update(delta)) {

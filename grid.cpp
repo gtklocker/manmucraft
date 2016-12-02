@@ -250,7 +250,7 @@ void Grid::kickCube(GreedyCoords start, GreedyCoords direction) {
 	direction.x = direction.x != 0 ? (direction.x / abs(direction.x)) : 0;
 	direction.z = direction.z != 0 ? (direction.z / abs(direction.z)) : 0;
 
-	Cube *prevCube = NULL;
+	Cube *prevCube = new Cube(EMPTY);
 	for (int x = start.x, z = start.z; isGreedyCoordValid(x) && isGreedyCoordValid(z); x -= direction.x, z -= direction.z) {
 		Cube *cb = getCubeAtGreedy((GreedyCoords){x, start.y, z});
 		Cube **cbPtr = &cb;
@@ -258,6 +258,7 @@ void Grid::kickCube(GreedyCoords start, GreedyCoords direction) {
 		grid[x][start.y][z] = prevCube;
 		prevCube = *cbPtr;
 	}
+	delete prevCube;
 }
 
 int Grid::getGridSize() {

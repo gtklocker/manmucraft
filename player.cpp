@@ -397,7 +397,7 @@ char* Player::getHUDString() {
 }
 
 void Player::kickCube() {
-	GreedyCoords current = m_grid->transformRealToGreedy((RealCoords){m_x, m_y + 0.9f, m_z});
+	GreedyCoords current = m_grid->transformRealToGreedy((RealCoords){m_x, m_y + 0.5f, m_z});
 	GreedyCoords chosen = m_grid->transformRealToGreedy(m_chosenCoords);
 
 	if (current.y != chosen.y) {

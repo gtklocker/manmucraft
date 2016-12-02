@@ -325,13 +325,13 @@ void Player::pickUpCube() {
 
 void Player::placeCube() {
 	if (m_reserve.size() > 0) {
-		Cube *front = m_grid->getCubeAtReal((RealCoords){ 
+		RealCoords pos = { 
 				m_x - PLACE_DISTANCE * sin(m_angle), 
 				m_y + PLAYER_HEIGHT + PLACE_DISTANCE * sin(m_pitch),
 				m_z - PLACE_DISTANCE * cos(m_angle)
-				});
-		if (front && front->color == EMPTY) {
-			front->color = m_reserve.back().color;
+				};
+
+		if (m_grid->placeCube(pos, m_reserve.back().color)) {
 			m_reserve.pop_back();
 			m_points += 5;
 		}

@@ -127,7 +127,7 @@ bool Grid::doCollide(RealCoords a, GreedyCoords b) {
 		return false;
 	}
 
-	float laxTileSize = 0.707106781 * m_tileSize;
+	float laxTileSize = 0.87 * m_tileSize;
 
 	RealCoords rb = transformGreedyToReal(b);
 

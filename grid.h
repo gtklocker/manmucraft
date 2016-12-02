@@ -31,6 +31,12 @@ private:
 	int m_layersToDrop;
 	float m_tileSize;
 	float m_dropTimer;
+
+	float m_colorPulse;
+	int ***m_trippyRand;
+
+	bool m_trippyMode;
+
 	Cube ****grid;
 
 	bool isGreedyCoordValid(int coord);
@@ -57,4 +63,6 @@ public:
 	float getCubeSize();
 	void kickCube(GreedyCoords start, GreedyCoords direction);
 	int getGridSize();
+
+	void toggleTrippy();
 };

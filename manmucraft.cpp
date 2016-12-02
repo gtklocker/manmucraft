@@ -43,6 +43,9 @@ float lastY;
 Grid *grid;
 Player *player;
 
+const char *TRIP_STRING = "trip";
+int tripIndex = 0;
+
 void initWorld(int gridSize) {
 	grid = new Grid(gridSize, TILE_SIZE);
 	player = new Player(gridSize / 2, .5, gridSize / 2, grid);
@@ -186,6 +189,19 @@ void specialKeypressHandler(int key, int x, int y) {
 }
 
 void keypressHandler(unsigned char key, int x, int y) {
+	if (key == TRIP_STRING[tripIndex]) {
+		++tripIndex;
+		if (tripIndex >= strlen(TRIP_STRING)) {
+			grid->toggleTrippy();
+			tripIndex = 0;
+		}
+
+		return;
+	}
+	else {
+		tripIndex = 0;
+	}
+
 	switch (key) {
 		case 27: // Escape
 			exit(0);
@@ -303,6 +319,8 @@ int main(int argc, char *argv[]) {
 	glutCreateWindow("Manmucraft!");
 
 	glEnable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 	
 	glutDisplayFunc(render);
 	glutReshapeFunc(reshapeHandler);

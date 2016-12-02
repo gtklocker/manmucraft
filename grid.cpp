@@ -13,14 +13,21 @@ Cube::Cube(Color c){
 Grid::Grid(int size, float tileSize) {
 	m_size = size;
 	m_tileSize = tileSize;
+	m_colorPulse = 0;
+	m_trippyMode = false;
 	
 	srand(time(0));
 	
 	grid = new Cube ***[size];
+	m_trippyRand = new int **[size];
 	for (int i = 0; i < size; ++i){
 		grid[i] = new Cube **[size];
+		m_trippyRand[i] = new int *[size];
+
 		for (int j = 0; j < size; ++j){
 			grid[i][j] = new Cube *[size];
+			m_trippyRand[i][j] = new int [size];
+
 			for (int k = 0; k < size; ++k){
 				Color randomColor = Color(rand() % MAGENTA);
 				if (j == 0) {
@@ -32,6 +39,8 @@ Grid::Grid(int size, float tileSize) {
 				else {
 					grid[i][j][k] = new Cube(EMPTY);
 				}
+
+				m_trippyRand[i][j][k] = rand() % 10;
 			}
 		}
 	}
@@ -58,10 +67,13 @@ Grid::~Grid() {
 				delete grid[i][j][k];
 			}
 			delete [] grid[i][j];
+			delete [] m_trippyRand[i][j];
 		}
 		delete [] grid[i];
+		delete [] m_trippyRand[i];
 	}
 	delete [] grid;
+	delete [] m_trippyRand;
 }	
 
 void Grid::update(float delta) {
@@ -73,6 +85,8 @@ void Grid::update(float delta) {
 			m_dropTimer -= DROP_TIME;
 		}
 	}
+
+	m_colorPulse += delta;
 }
 
 // We having two systems of coordinates here,
@@ -140,23 +154,30 @@ void Grid::render() {
 				}
 
 				float c = grid[i][j][k]->isChosen ? .35 : 0;
+
+				float o = 0.95;
+				if (m_trippyMode) {
+					float tripFactor = (1.0 + sin(m_colorPulse * ((1.0 + sin(m_trippyRand[i][j][k])) / 2.0))) / 2.0;
+					o = .2 + tripFactor;
+					c -= -.2 + tripFactor;
+				}
 				switch (grid[i][j][k]->color) {
 					case EMPTY:
 						continue;
 					case YELLOW:
-						glColor3f(.90 + c, .67 + c, .04 + c);
+						glColor4f(.90 + c, .67 + c, .04 + c, o);
 						break;
 					case RED:
-						glColor3f(.97 + c, .03 + c, .03 + c);
+						glColor4f(.97 + c, .03 + c, .03 + c, o);
 						break;
 					case BLUE:
-						glColor3f(0.0 + c, 0.0 + c, 1.0 + c);
+						glColor4f(0.0 + c, 0.0 + c, 1.0 + c, o);
 						break;
 					case GREEN:
-						glColor3f(0.0 + c, 1.0 + c, 0.0 + c);
+						glColor4f(0.0 + c, 1.0 + c, 0.0 + c, o);
 						break;
 					case MAGENTA:
-						glColor3f(.71 + c, .11 + c, .76 + c);
+						glColor4f(.71 + c, .11 + c, .76 + c, o);
 						break;
 					default:
 						break;
@@ -241,4 +262,8 @@ void Grid::kickCube(GreedyCoords start, GreedyCoords direction) {
 
 int Grid::getGridSize() {
 	return m_size;
+}
+
+void Grid::toggleTrippy() {
+	m_trippyMode = !m_trippyMode;
 }

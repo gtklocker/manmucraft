@@ -122,6 +122,7 @@ bool TextScreen::update(float delta) {
 	m_animationTime += delta * .55;
 	m_opacity = m_animationDirection < 0 ? (1 - m_animationTime) : m_animationTime;
 	m_opacity = pow(m_opacity, 4);
+	m_opacity = m_opacity > 1.0 ? 1.0 : m_opacity;
 	return true;
 }
 

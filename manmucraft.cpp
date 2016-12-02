@@ -204,18 +204,6 @@ void toggleHelpScreen() {
 
 void specialKeypressHandler(int key, int x, int y) {
 	switch (key) {
-		case GLUT_KEY_LEFT:
-			player->turnLeft();
-			break;
-		case GLUT_KEY_RIGHT:
-			player->turnRight();
-			break;
-		case GLUT_KEY_UP:
-			player->moveForward();
-			break;
-		case GLUT_KEY_DOWN:
-			player->moveBackwards();
-			break;
 		case GLUT_KEY_F2:
 			toggleFullscreen();
 			break;

@@ -374,8 +374,14 @@ void Player::respawn() {
 
 void Player::death() {
 	m_lives--;
+	if (m_lives < 0) {
+		m_lives = STARTING_LIVES;
+		m_points = STARTING_POINTS;
+		m_grid->resetCubes();
+		m_reserve.clear();
+		m_levelReached = 0;
+	}
 	respawn();
-	//TODO:Death screen if lives < 0
 }
 
 void Player::updateView() {

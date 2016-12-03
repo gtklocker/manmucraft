@@ -27,7 +27,7 @@ Text::Text(char *text, int w, int h) {
 	strncpy(m_text, text, BUFFER_SIZE);
 }
 
-Text::~Text() { 
+Text::~Text() {
 }
 
 void Text::onTextChange(char *text) {

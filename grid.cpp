@@ -15,9 +15,9 @@ Grid::Grid(int size, float tileSize) {
 	m_tileSize = tileSize;
 	m_colorPulse = 0;
 	m_trippyMode = false;
-	
+
 	srand(time(0));
-	
+
 	grid = new Cube ***[size];
 	m_trippyRand = new int **[size];
 	for (int i = 0; i < size; ++i){
@@ -38,7 +38,7 @@ Grid::Grid(int size, float tileSize) {
 	resetCubes();
 }
 
-Grid::~Grid() { 
+Grid::~Grid() {
 	for (int i = 0; i < m_size; ++i){
 		for (int j = 0;j < m_size; ++j){
 			for (int k = 0; k < m_size; ++k){
@@ -52,7 +52,7 @@ Grid::~Grid() {
 	}
 	delete [] grid;
 	delete [] m_trippyRand;
-}	
+}
 
 void Grid::update(float delta) {
 	if (m_layersToDrop > 0) {

@@ -8,7 +8,7 @@ enum Color {
 };
 
 struct Cube {
-	Color color;	
+	Color color;
 	bool isChosen;
 	Cube(Color c);
 };
@@ -59,7 +59,7 @@ public:
 	void dropCubes();
 
 	bool placeCube(RealCoords pos, Color c);
-	
+
 	float getCubeSize();
 	void kickCube(GreedyCoords start, GreedyCoords direction);
 	int getGridSize();

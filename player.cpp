@@ -49,7 +49,7 @@ Player::Player(float x, float y, float z, Grid *grid) {
 	m_ySpeed = 0.0;
 	m_points = STARTING_POINTS;
 	m_lives = STARTING_LIVES;
-	
+
 	respawn();
 	m_animationTimer = 0.0f;
 }
@@ -136,7 +136,7 @@ void Player::update(float delta) {
 	RealCoords start {m_x, m_y + 0.9f, m_z};
 	RealCoords current {m_x, m_y + 0.9f, m_z};
 	Cube *cb;
-	
+
 	while (distanceRealCoords(start, current) <= RAY_LENGTH) {
 		current.x -= 0.1f * sin(m_angle);
 		current.y += 0.1f * sin(m_pitch);
@@ -178,8 +178,8 @@ void Player::render() {
 	glPushMatrix();
 
 	glTranslatef(m_x, m_y + Y_DIST, m_z);
-	glRotatef(toDegrees(m_angle) + 180, 0.0, 1.0, 0.0);	
-	
+	glRotatef(toDegrees(m_angle) + 180, 0.0, 1.0, 0.0);
+
 	// Legs
 	glColor3f(0.25, 1.0, 0.0);
 	glPushMatrix();
@@ -195,7 +195,7 @@ void Player::render() {
 	glutSolidCube(LEGS_SIZE);
 	glPopMatrix();
 	glPopMatrix();
-	
+
 	// Body
 	glColor3f(0.5, 1.0, 0.0);
 	glPushMatrix();
@@ -349,8 +349,8 @@ void Player::pickUpCube() {
 
 void Player::placeCube() {
 	if (m_reserve.size() > 0) {
-		RealCoords pos = { 
-				m_x - PLACE_DISTANCE * sin(m_angle), 
+		RealCoords pos = {
+				m_x - PLACE_DISTANCE * sin(m_angle),
 				m_y + PLAYER_HEIGHT + PLACE_DISTANCE * sin(m_pitch),
 				m_z - PLACE_DISTANCE * cos(m_angle)
 				};
@@ -400,13 +400,13 @@ void Player::death() {
 
 void Player::updateView() {
 	gluLookAt(
-		((m_cameraRadius * sin(M_PI + m_angle))) 
-			- (1.5 * (m_cameraRadius * sin(M_PI + m_angle))) 
+		((m_cameraRadius * sin(M_PI + m_angle)))
+			- (1.5 * (m_cameraRadius * sin(M_PI + m_angle)))
 			* ((m_cameraRadius - FP_RADIUS / (TP_RADIUS - FP_RADIUS))) + m_x,
-		m_y  + 0.015 * sin(m_cameraShake / 0.015) + 0.9 
+		m_y  + 0.015 * sin(m_cameraShake / 0.015) + 0.9
 		+ 1.1 * ((m_cameraRadius - FP_RADIUS) / (TP_RADIUS - FP_RADIUS)),
 		(m_cameraRadius * cos(M_PI + m_angle))
-			- (1.5 * (m_cameraRadius * cos(M_PI + m_angle))) 
+			- (1.5 * (m_cameraRadius * cos(M_PI + m_angle)))
 			* ((m_cameraRadius - FP_RADIUS / (TP_RADIUS - FP_RADIUS))) + m_z,
 
 		m_x - 1.0 * sin(m_angle),

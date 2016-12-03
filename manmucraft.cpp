@@ -121,7 +121,7 @@ void draw() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	player->updateView();
-	glPushMatrix();	
+	glPushMatrix();
 	grid->render();
 	player->render();
 	glPopMatrix();
@@ -153,16 +153,16 @@ void render() {
 	newTime = glutGet(GLUT_ELAPSED_TIME);
 	delta += (newTime - oldTime) * STEP;
 	oldTime = newTime;
-	
+
 	while (delta >= 1) {
 		// tick game's logic
-		update(STEP);	
+		update(STEP);
 		ticks++;
 		delta--;
 	}
 	// render game
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	draw();	
+	draw();
 
 	glutSwapBuffers();
 	frames++;
@@ -351,7 +351,7 @@ int main(int argc, char *argv[]) {
 
 	lastX = WINDOW_WIDTH / 2;
 	lastY = WINDOW_HEIGHT / 2;
-	
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -360,7 +360,7 @@ int main(int argc, char *argv[]) {
 	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	
+
 	glutDisplayFunc(render);
 	glutReshapeFunc(reshapeHandler);
 	glutIdleFunc(render);
@@ -377,7 +377,7 @@ int main(int argc, char *argv[]) {
 	cout << glGetString(GL_VENDOR) << endl;
 	cout << glGetString(GL_RENDERER) << endl;
 
-	oldTime = glutGet(GLUT_ELAPSED_TIME);	
+	oldTime = glutGet(GLUT_ELAPSED_TIME);
 	glutWarpPointer(lastX, lastY);
 
 	toggleHelpScreen();

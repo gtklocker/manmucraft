@@ -1,0 +1,20 @@
+dist: precise
+
+language: cpp
+compiler: gcc
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-5
+      - freeglut3-dev
+      - binutils-gold
+env: COMPILER=g++-5
+
+before_script:
+  - eval "[[ -v COMPILER ]] && export CXX=$COMPILER" # because travis fucks this up
+script:
+  - make
+  - make test
